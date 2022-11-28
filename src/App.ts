@@ -1,17 +1,14 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import express from 'express';
-import RankingEntity from './domains/entities/RankingEntity';
-import UserEntity from './domains/entities/UserEntity';
+import {RankingEntity} from './domains/entities/RankingEntity';
+import {UserEntity} from './domains/entities/UserEntity';
 import IRankingRepository from './domains/repositories/RankingRepository';
-import IUserCreateRepository from './domains/repositories/UserCreateRepository';
+import IUserCreateRepository from './domains/repositories/UserRepository';
 import RankingSQLiteFake from './infrastructures/sqlite/fakes/RankingSQLiteFake';
 import RankingSQLite from './infrastructures/sqlite/RankingSQLite';
-import UserCreateSQLite from './infrastructures/sqlite/UserCreateSQLite';
+import UserCreateSQLite from './infrastructures/sqlite/UserSQLite';
 
 const app: express.Express = express();
-app.listen(process.env.SERVER_PORT, () => { console.log('Start listen: http://localhost:3000') })
+app.listen(3000, () => { console.log('Start listen: http://localhost:3000') })
 
 /**
  * トップページ
@@ -54,7 +51,14 @@ app.get('/ranking/getAll', async (req: express.Request, res: express.Response) =
  app.post('/user/save', async (req: express.Request, res: express.Response) => {
     try {
         const userCreateRepository: IUserCreateRepository = new UserCreateSQLite();
-        await userCreateRepository.save(new UserEntity(0));
+        await userCreateRepository.save(new UserEntity('0', {
+            username: '',
+            email: '',
+            password: '',
+            imageUrl: '',
+            createdAt: '',
+            updatedAt: '',
+        }));
         res.status(200).send('OK');
     } catch (error) {
         res.status(500).send(`ERROR: ${error}`);

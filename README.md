@@ -14,3 +14,5 @@ http://sakuragame.starfree.jp/
 ✕ 経験値システム  
 ✕ サーバリスト
 ✕ Discord連携システム
+✕ メッセージ管理
+✕ ツイート？

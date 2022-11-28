@@ -1,4 +1,4 @@
-import RankingEntity from "../../domains/entities/RankingEntity";
+import {RankingEntity} from "../../domains/entities/RankingEntity";
 import IRankingRepository from "../../domains/repositories/RankingRepository";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
@@ -15,12 +15,14 @@ class RankingSQLite implements IRankingRepository {
         const result: Array<RankingEntity> = new Array<RankingEntity>;
         if (datalist) {
             for (const data of datalist) {
-                const rankingEntity = new RankingEntity(data.id);
-                rankingEntity.gamemode = data.gamemode;
-                rankingEntity.username = data.username;
-                rankingEntity.mass = data.mass;
-                rankingEntity.createdAt = data.created_at;
-                rankingEntity.updatedAt = data.updated_at;
+                const rankingEntity = new RankingEntity(
+                    data.id, {
+                    gamemode: data.gamemode,
+                    username: data.username,
+                    mass: data.mass,
+                    createdAt: data.created_at,
+                    updatedAt: data.updated_at,
+                });
                 result.push(rankingEntity);
             }
         }

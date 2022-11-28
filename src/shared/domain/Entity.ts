@@ -1,9 +1,11 @@
-export abstract class Entity<T> {
-    protected readonly _id: string;
-    protected props: T;
+export abstract class Entity <Id, Props> {
+    readonly id: Id;
+    protected props: Props;
 
-    constructor(props: T, id: string) {
-        this._id = id;
-        this.props = props
+    constructor(id: Id, props: Props) {
+        this.id = id;
+        this.props = props;
     }
+
+    public abstract equals(obj?: Entity<Id, Props>): boolean;
 }
