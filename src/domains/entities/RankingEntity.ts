@@ -29,18 +29,33 @@ export class RankingEntity extends Entity<number, RankingProps> {
         throw new Error("Method not implemented.");
     }
 
+    /**
+     * ゲームモード
+     */
     public set gamemode(value: string) { this.props.gamemode = value; }
     public get gamemode(): string { return this.props.gamemode; }
 
+    /**
+     * ユーザ名
+     */
     public set username(value: string) { this.props.username = UserName.create({ name: value }); }
     public get username(): string { return this.props.username.DisplayName; }
 
+    /**
+     * 最高質量
+     */
     public set mass(value: string) { this.props.mass = value; }
     public get mass(): string { return this.props.mass; }
 
+    /**
+     * 生成日時
+     */
     public set createdAt(value: string) { this.props.createdAt = Time.create({date: value}); }
     public get createdAt(): string { return this.props.createdAt.date; }
 
+    /**
+     * 更新日時
+     */
     public set updatedAt(value: string) { this.props.updatedAt = Time.create({date: value}); }
     public get updatedAt(): string { return this.props.updatedAt.date; }
 }

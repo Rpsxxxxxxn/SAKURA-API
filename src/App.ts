@@ -1,8 +1,12 @@
 import express from 'express';
-import {RankingEntity} from './domains/entities/RankingEntity';
-import {UserEntity} from './domains/entities/UserEntity';
+import { RankingEntity } from './domains/entities/RankingEntity';
+import { UserEntity } from './domains/entities/UserEntity';
+import { UserType } from './domains/models/UserType';
 import IRankingRepository from './domains/repositories/RankingRepository';
 import IUserCreateRepository from './domains/repositories/UserRepository';
+import { Authority } from './domains/valueobjects/Authority';
+import { Time } from './domains/valueobjects/Time';
+import { UserName } from './domains/valueobjects/UserName';
 import RankingSQLiteFake from './infrastructures/sqlite/fakes/RankingSQLiteFake';
 import RankingSQLite from './infrastructures/sqlite/RankingSQLite';
 import UserCreateSQLite from './infrastructures/sqlite/UserSQLite';
@@ -52,12 +56,13 @@ app.get('/ranking/getAll', async (req: express.Request, res: express.Response) =
     try {
         const userCreateRepository: IUserCreateRepository = new UserCreateSQLite();
         await userCreateRepository.save(UserEntity.create('0', {
-            username: '',
+            username: UserName.create({ name: '' }),
+            authority: Authority.create({ value: UserType.NORMAL }),
             email: '',
             password: '',
             imageUrl: '',
-            createdAt: '',
-            updatedAt: '',
+            createdAt: Time.create({ date: '' }),
+            updatedAt: Time.create({ date: '' }),
         }));
         res.status(200).send('OK');
     } catch (error) {
