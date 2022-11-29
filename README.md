@@ -12,3 +12,9 @@
 ✕ Discord連携システム  
 ✕ メッセージ管理  
 ✕ ツイート？  
+
+# 使用ライブラリ
+Express  
+sqlite3  
+dotenv  
+Typescript  

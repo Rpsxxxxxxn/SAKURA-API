@@ -26,7 +26,7 @@ export class UserEntity extends Entity<string, UserProps> {
      * イコール
      * @param obj 
      */
-    public equals(obj?: Entity<string, UserProps> | undefined): boolean {
+    public equals(obj: Entity<string, UserProps>): boolean {
         throw new Error("Method not implemented.");
     }
 
