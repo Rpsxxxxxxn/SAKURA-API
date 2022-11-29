@@ -1,5 +1,6 @@
 import {UserEntity} from "../../domains/entities/UserEntity";
 import IUserRepository from "../../domains/repositories/UserRepository";
+import { Authority } from "../../domains/valueobjects/Authority";
 import { Time } from "../../domains/valueobjects/Time";
 import { UserName } from "../../domains/valueobjects/UserName";
 import SQLiteHelper from "./helper/SQLiteHelper";
@@ -15,6 +16,7 @@ class UserSQLite implements IUserRepository {
     public async save(model: UserEntity): Promise<void> {
         const user = UserEntity.create(`0`, {
             username: UserName.create({ name: '' }),
+            authority: Authority.create({ value: 0 }),
             email: '',
             password: '',
             imageUrl: '',

@@ -1,9 +1,11 @@
 import { Entity } from "../../shared/domain/Entity";
+import { Authority } from "../valueobjects/Authority";
 import { Time } from "../valueobjects/Time";
 import { UserName } from "../valueobjects/UserName";
 
 export interface UserProps {
     username: UserName;
+    authority: Authority;
     email: string;
     password: string;
     imageUrl: string;
@@ -53,6 +55,12 @@ export class UserEntity extends Entity<string, UserProps> {
         this.props.username = UserName.create({name: value});
     }
     public get username(): string { return this.props.username.DisplayName; }
+
+    /**
+     * 権限タイプ
+     */
+    public set type(value: number) { this.props.authority = Authority.create({value: value}); }
+    public get type(): number { return this.props.authority.type; }
 
     /**
      * メールアドレス
