@@ -1,4 +1,4 @@
-export interface Writer<E> {
-    save(value: E): Promise<void>;
-    remove(id: any): Promise<void>;
+export interface Writer<Id, Entity> {
+    save(value: Entity): Promise<void>;
+    remove(id: Id): Promise<void>;
 }

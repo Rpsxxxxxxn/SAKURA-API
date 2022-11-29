@@ -33,21 +33,6 @@ export class UserEntity extends Entity<string, UserProps> {
     }
 
     /**
-     * 名前バリデーション
-     * @param value 
-     * @returns 
-     */
-    private isValidName(value: string) {
-        if (value) {
-            return false;
-        }
-        if (value.length < 3 || value.length > 10) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * ユーザ名
      * @param value 
      */

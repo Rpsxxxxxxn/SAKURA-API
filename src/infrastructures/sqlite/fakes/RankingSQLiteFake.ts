@@ -33,7 +33,7 @@ class RankingSQLiteFake implements IRankingRepository {
      * @returns RankingModel
      */
     public async find(id: number): Promise<RankingEntity> {
-        return RankingEntity.create(1, {
+        return RankingEntity.create(id, {
             gamemode: '',
             username: UserName.create({ name: '' }),
             mass: '',

@@ -1,16 +1,4 @@
-import { RankingEntity } from './../entities/RankingEntity';
+import { Reader } from '../../shared/domain/Reader';
+import { ExperienceEntity } from '../entities/ExperienceEntity';
 
-interface IExperienceRepository {
-    /**
-     * 全取得
-     */
-    findAll(): Promise<Array<RankingEntity>>;
-
-    /**
-     * 取得
-     * @param id 
-     */
-    find(id: number): Promise<RankingEntity>;
-}
-
-export default IExperienceRepository;
+export default interface IExperienceRepository extends Reader<number, ExperienceEntity> {}

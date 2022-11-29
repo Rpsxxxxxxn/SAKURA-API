@@ -1,12 +1,3 @@
-export interface IUserAuthorityRepository {
-    /**
-     * ユーザの全取得
-     */
-    findAll(): Promise<Array<number>>;
+import { Reader } from "../../shared/domain/Reader";
 
-    /**
-     * ユーザ検索
-     * @param id ユーザID
-     */
-    find(id: number): Promise<number>;
-}
+export interface IUserAuthorityRepository extends Reader<number, number> {}
