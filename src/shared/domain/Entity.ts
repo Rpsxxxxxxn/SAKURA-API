@@ -1,5 +1,5 @@
 export abstract class Entity <Id, Props> {
-    readonly id: Id;
+    public readonly id: Id;
     protected props: Props;
 
     protected constructor(id: Id, props: Props) {

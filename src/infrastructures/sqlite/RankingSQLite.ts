@@ -1,5 +1,7 @@
 import {RankingEntity} from "../../domains/entities/RankingEntity";
 import IRankingRepository from "../../domains/repositories/RankingRepository";
+import { Time } from "../../domains/valueobjects/Time";
+import { UserName } from "../../domains/valueobjects/UserName";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class RankingSQLite implements IRankingRepository {
@@ -18,10 +20,10 @@ class RankingSQLite implements IRankingRepository {
                 const rankingEntity = RankingEntity.create(
                     data.id, {
                     gamemode: data.gamemode,
-                    username: data.username,
+                    username: UserName.create({ name: data.username }),
                     mass: data.mass,
-                    createdAt: data.created_at,
-                    updatedAt: data.updated_at,
+                    createdAt: Time.create({date: data.created_at}),
+                    updatedAt: Time.create({date: data.created_at}),
                 });
                 result.push(rankingEntity);
             }

@@ -1,7 +1,7 @@
 import ValueObject from "../../shared/domain/ValueObject";
 
 export interface UserNameProps {
-    value: string;
+    name: string;
 }
 
 export class UserName extends ValueObject<UserNameProps> {
@@ -11,8 +11,8 @@ export class UserName extends ValueObject<UserNameProps> {
     /**
      * 名前の取得
      */
-    get value(): string {
-        return this.props.value;
+    public get DisplayName(): string {
+        return this.props.name;
     }
 
     /**
@@ -32,10 +32,10 @@ export class UserName extends ValueObject<UserNameProps> {
      * @param name 
      * @returns 
      */
-    public static create(name: string) {
-        if (!this.isValidName(name)) {
-            throw new Error(`Invalid Argument - userName:${name}`);
+    public static create(value: UserNameProps) {
+        if (!this.isValidName(value.name)) {
+            throw new Error(`Invalid Argument - userName:${value.name}`);
         }
-        return new UserName({ value: name });
+        return new UserName(value);
     }
 }

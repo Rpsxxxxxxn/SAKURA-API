@@ -1,6 +1,7 @@
 import {RankingEntity} from "../../../domains/entities/RankingEntity";
 import IRankingRepository from "../../../domains/repositories/RankingRepository";
 import { Time } from "../../../domains/valueobjects/Time";
+import { UserName } from "../../../domains/valueobjects/UserName";
 
 class RankingSQLiteFake implements IRankingRepository {
     /**
@@ -11,17 +12,17 @@ class RankingSQLiteFake implements IRankingRepository {
         const result: Array<RankingEntity> = new Array<RankingEntity>();
         result.push(RankingEntity.create(1, {
             gamemode: '',
-            username: '',
+            username: UserName.create({ name: '' }),
             mass: '',
-            createdAt: Time.create({date: ''}),
-            updatedAt: Time.create({date: ''})
+            createdAt: Time.create({date: new Date().toLocaleString()}),
+            updatedAt: Time.create({date: new Date().toLocaleString()})
         }))
         result.push(RankingEntity.create(2, {
             gamemode: '',
-            username: '',
+            username: UserName.create({ name: '' }),
             mass: '',
-            createdAt: Time.create({date: ''}),
-            updatedAt: Time.create({date: ''})
+            createdAt: Time.create({date: new Date().toLocaleString()}),
+            updatedAt: Time.create({date: new Date().toLocaleString()})
         }))
         return result;
     }
@@ -34,10 +35,10 @@ class RankingSQLiteFake implements IRankingRepository {
     public async find(id: number): Promise<RankingEntity> {
         return RankingEntity.create(1, {
             gamemode: '',
-            username: '',
+            username: UserName.create({ name: '' }),
             mass: '',
-            createdAt: Time.create({date: ''}),
-            updatedAt: Time.create({date: ''})
+            createdAt: Time.create({date: new Date().toLocaleString()}),
+            updatedAt: Time.create({date: new Date().toLocaleString()})
         });
     }
     
