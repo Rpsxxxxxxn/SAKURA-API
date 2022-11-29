@@ -1,22 +1,23 @@
 import { Entity } from "../../shared/domain/Entity";
+import { Time } from "../valueobjects/Time";
 
 export interface RankingProps {
     gamemode: string;
     username: string;
     mass: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Time;
+    updatedAt: Time;
 }
 
 export class RankingEntity extends Entity<number, RankingProps> {
-
     /**
-     * コンストラクタ
+     * インスタンス生成
      * @param id 
      * @param props 
+     * @returns 
      */
-    constructor(id: number, props: RankingProps) {
-        super(id, props);
+    public static create(id: number, props: RankingProps) {
+        return new RankingEntity(id, props);
     }
 
     /**
@@ -36,9 +37,9 @@ export class RankingEntity extends Entity<number, RankingProps> {
     public set mass(value: string) { this.props.mass = value; }
     public get mass(): string { return this.props.mass; }
 
-    public set createdAt(value: string) { this.props.createdAt = value; }
-    public get createdAt(): string { return this.props.createdAt; }
+    public set createdAt(value: string) { this.props.createdAt = Time.create({date: value}); }
+    public get createdAt(): string { return this.props.createdAt.date; }
 
-    public set updatedAt(value: string) { this.props.updatedAt = value; }
-    public get updatedAt(): string { return this.props.updatedAt; }
+    public set updatedAt(value: string) { this.props.updatedAt = Time.create({date: value}); }
+    public get updatedAt(): string { return this.props.updatedAt.date; }
 }

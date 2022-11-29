@@ -51,7 +51,7 @@ app.get('/ranking/getAll', async (req: express.Request, res: express.Response) =
  app.post('/user/save', async (req: express.Request, res: express.Response) => {
     try {
         const userCreateRepository: IUserCreateRepository = new UserCreateSQLite();
-        await userCreateRepository.save(new UserEntity('0', {
+        await userCreateRepository.save(UserEntity.create('0', {
             username: '',
             email: '',
             password: '',

@@ -1,5 +1,6 @@
 import {RankingEntity} from "../../../domains/entities/RankingEntity";
 import IRankingRepository from "../../../domains/repositories/RankingRepository";
+import { Time } from "../../../domains/valueobjects/Time";
 
 class RankingSQLiteFake implements IRankingRepository {
     /**
@@ -8,19 +9,19 @@ class RankingSQLiteFake implements IRankingRepository {
      */
     public async findAll(): Promise<Array<RankingEntity>> {
         const result: Array<RankingEntity> = new Array<RankingEntity>();
-        result.push(new RankingEntity(1, {
+        result.push(RankingEntity.create(1, {
             gamemode: '',
             username: '',
             mass: '',
-            createdAt: '',
-            updatedAt: '',
+            createdAt: Time.create({date: ''}),
+            updatedAt: Time.create({date: ''})
         }))
-        result.push(new RankingEntity(2, {
+        result.push(RankingEntity.create(2, {
             gamemode: '',
             username: '',
             mass: '',
-            createdAt: '',
-            updatedAt: '',
+            createdAt: Time.create({date: ''}),
+            updatedAt: Time.create({date: ''})
         }))
         return result;
     }
@@ -31,12 +32,12 @@ class RankingSQLiteFake implements IRankingRepository {
      * @returns RankingModel
      */
     public async find(id: number): Promise<RankingEntity> {
-        return new RankingEntity(1, {
+        return RankingEntity.create(1, {
             gamemode: '',
             username: '',
             mass: '',
-            createdAt: '',
-            updatedAt: '',
+            createdAt: Time.create({date: ''}),
+            updatedAt: Time.create({date: ''})
         });
     }
     

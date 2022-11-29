@@ -1,10 +1,10 @@
-import BaseValueObject from "../../shared/domain/ValueObject";
+import ValueObject from "../../shared/domain/ValueObject";
 
 export interface TimeProps {
     date: string;
 }
 
-export class Time extends BaseValueObject<TimeProps> {
+export class Time extends ValueObject<TimeProps> {
     static create(props: TimeProps): Time {
         return new Time(props);
     }

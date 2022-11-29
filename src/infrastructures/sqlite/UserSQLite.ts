@@ -10,7 +10,7 @@ class UserSQLite implements IUserRepository {
      * @param model ユーザデータ
      */
     public async save(model: UserEntity): Promise<void> {
-        const user = new UserEntity(`0`, {
+        const user = UserEntity.create(`0`, {
             username: '',
             email: '',
             password: '',

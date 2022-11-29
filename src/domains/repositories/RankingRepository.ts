@@ -1,4 +1,4 @@
-import RankingEntity from "../entities/RankingEntity";
+import {RankingEntity} from "../entities/RankingEntity";
 
 interface IRankingRepository {
     /**

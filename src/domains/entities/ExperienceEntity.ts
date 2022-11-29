@@ -5,8 +5,14 @@ export interface ExperienceProps {
 }
 
 export class ExperienceEntity extends Entity<string, ExperienceProps> {
-    constructor(id: string, props: ExperienceProps) {
-        super(id, props);
+    /**
+     * インスタンス生成
+     * @param id 
+     * @param props 
+     * @returns 
+     */
+    public static create(id: string, props: ExperienceProps) {
+        return new ExperienceEntity(id, props);
     }
 
     public equals(obj?: Entity<string, ExperienceProps> | undefined): boolean {

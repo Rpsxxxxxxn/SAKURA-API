@@ -10,14 +10,14 @@ export interface UserProps {
 }
 
 export class UserEntity extends Entity<string, UserProps> {
-
     /**
-     * コンストラクタ
+     * インスタンス生成
      * @param id 
      * @param props 
+     * @returns 
      */
-    constructor(id: string, props: UserProps) {
-        super(id, props);
+    public static create(id: string, props: UserProps) {
+        return new UserEntity(id, props);
     }
 
     /**
@@ -28,7 +28,31 @@ export class UserEntity extends Entity<string, UserProps> {
         throw new Error("Method not implemented.");
     }
 
-    public set username(value: string) { this.props.username = value; }
+    /**
+     * 名前バリデーション
+     * @param value 
+     * @returns 
+     */
+    private isValidName(value: string) {
+        if (value) {
+            return false;
+        }
+        if (value.length < 3 || value.length > 10) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * ユーザ名
+     * @param value 
+     */
+    public set username(value: string) {
+        if (!this.isValidName(value)) {
+            throw new Error('UserEntity.username: ValidError');
+        }
+        this.props.username = value;
+    }
     public get username(): string { return this.props.username; }
 
     public set email(value: string) { this.props.email = value; }

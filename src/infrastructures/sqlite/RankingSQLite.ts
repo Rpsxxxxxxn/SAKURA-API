@@ -12,10 +12,10 @@ class RankingSQLite implements IRankingRepository {
      */
     public async findAll(): Promise<Array<RankingEntity>> {
         const datalist = await SQLiteHelper.all(RankingSQLite.GETALL);
-        const result: Array<RankingEntity> = new Array<RankingEntity>;
+        const result: Array<RankingEntity> = new Array<RankingEntity>();
         if (datalist) {
             for (const data of datalist) {
-                const rankingEntity = new RankingEntity(
+                const rankingEntity = RankingEntity.create(
                     data.id, {
                     gamemode: data.gamemode,
                     username: data.username,
