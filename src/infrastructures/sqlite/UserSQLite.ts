@@ -8,13 +8,15 @@ import SQLiteHelper from "./helper/SQLiteHelper";
 class UserSQLite implements IUserRepository {
     public static readonly INSERT_SQL: string = '';
     public static readonly DELETE_SQL: string = '';
+    public static readonly ONE_GET_SQL: string = '';
+    public static readonly ALL_GET_SQL: string = '';
 
     /**
      * 追加と更新を行う
      * @param model ユーザデータ
      */
     public async save(model: UserEntity): Promise<void> {
-        const user = UserEntity.create(`0`, {
+        const user = UserEntity.create('0', {
             username: UserName.create({ name: '' }),
             authority: Authority.create({ value: 0 }),
             email: '',
@@ -31,9 +33,7 @@ class UserSQLite implements IUserRepository {
      * @param id 
      */
     public async remove(id: number): Promise<void> {
-        if (id < 0) {
-            throw Error('');
-        }
+        if (id < 0) throw new Error('');
         await SQLiteHelper.execute(UserSQLite.DELETE_SQL, id);
     }
 
@@ -41,7 +41,7 @@ class UserSQLite implements IUserRepository {
      * ユーザの全取得
      */
     public async findAll(): Promise<UserEntity[]> {
-        throw new Error("Method not implemented.");
+        return await SQLiteHelper.get(UserSQLite.ALL_GET_SQL);
     }
 
     /**
@@ -49,7 +49,8 @@ class UserSQLite implements IUserRepository {
      * @param id ユーザID
      */
     public async find(id: number): Promise<UserEntity> {
-        throw new Error("Method not implemented.");
+        if (id < 0) throw new Error('');
+        return await SQLiteHelper.get(UserSQLite.ONE_GET_SQL);
     }
 }
 

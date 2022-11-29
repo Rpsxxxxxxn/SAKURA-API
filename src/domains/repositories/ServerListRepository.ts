@@ -1,33 +1,10 @@
+import { Reader } from "../../shared/domain/Reader";
+import { Writer } from "../../shared/domain/Writer";
 import { ServerListEntity } from "../entities/ServerListEntity";
 
-interface IServerListRepository {
-    /**
-     * サーバリストの取得
-     */
-    findAll(): Promise<Array<ServerListEntity>>;
-    
-    /**
-     * サーバ検索
-     * @param id ID
-     */
-    find(id: number): Promise<ServerListEntity>;
-
-    /**
-     * サーバの追加と更新
-     * @param model サーバモデルデータ
-     */
-    save(model: ServerListEntity): Promise<void>;
-
-    /**
-     * サーバの削除
-     * @param id ランキングID
-     */
-    remove(id: number): Promise<void>;
-
+export default interface IServerListRepository extends Reader<number, ServerListEntity>, Writer<number, ServerListEntity> {
     /**
      * サーバの生存チェック
      */
     healthCheck(): Promise<void>;
 }
-
-export default IServerListRepository;

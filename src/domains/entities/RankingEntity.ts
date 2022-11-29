@@ -25,7 +25,7 @@ export class RankingEntity extends Entity<number, RankingProps> {
      * イコール
      * @param obj 
      */
-    public equals(obj?: Entity<number, RankingProps> | undefined): boolean {
+    public equals(obj: Entity<number, RankingProps>): boolean {
         throw new Error("Method not implemented.");
     }
 

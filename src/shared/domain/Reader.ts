@@ -1,4 +1,4 @@
-export interface Reader<E> {
-    findAll(): Promise<E>;
-    find(): Promise<E>;
+export interface Reader<Id, Entity> {
+    findAll(): Promise<Array<Entity>>;
+    find(id: Id): Promise<Entity>;
 }
