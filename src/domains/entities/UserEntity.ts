@@ -1,12 +1,14 @@
 import { Entity } from "../../shared/domain/Entity";
+import { Time } from "../valueobjects/Time";
+import { UserName } from "../valueobjects/UserName";
 
 export interface UserProps {
-    username: string;
+    username: UserName;
     email: string;
     password: string;
     imageUrl: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Time;
+    updatedAt: Time;
 }
 
 export class UserEntity extends Entity<string, UserProps> {
@@ -48,25 +50,37 @@ export class UserEntity extends Entity<string, UserProps> {
      * @param value 
      */
     public set username(value: string) {
-        if (!this.isValidName(value)) {
-            throw new Error('UserEntity.username: ValidError');
-        }
-        this.props.username = value;
+        this.props.username = UserName.create({name: value});
     }
-    public get username(): string { return this.props.username; }
+    public get username(): string { return this.props.username.DisplayName; }
 
+    /**
+     * メールアドレス
+     */
     public set email(value: string) { this.props.email = value; }
     public get email(): string { return this.props.email; }
 
+    /**
+     * パスワード
+     */
     public set password(value: string) { this.props.password = value; }
     public get password(): string { return this.props.password; }
 
+    /**
+     * 画像URL
+     */
     public set imageUrl(value: string) { this.props.imageUrl = value; }
     public get imageUrl(): string { return this.props.imageUrl; }
 
-    public set createdAt(value: string) { this.props.createdAt = value; }
-    public get createdAt(): string { return this.props.createdAt; }
-
-    public set updatedAt(value: string) { this.props.updatedAt = value; }
-    public get updatedAt(): string { return this.props.updatedAt; }
+    /**
+     * 生成日時
+     */
+     public set createdAt(value: string) { this.props.createdAt = Time.create({date: value}); }
+     public get createdAt(): string { return this.props.createdAt.date; }
+ 
+     /**
+      * 更新日時
+      */
+     public set updatedAt(value: string) { this.props.updatedAt = Time.create({date: value}); }
+     public get updatedAt(): string { return this.props.updatedAt.date; }
 }

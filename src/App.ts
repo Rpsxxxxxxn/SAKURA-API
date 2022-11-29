@@ -3,6 +3,8 @@ import {RankingEntity} from './domains/entities/RankingEntity';
 import {UserEntity} from './domains/entities/UserEntity';
 import IRankingRepository from './domains/repositories/RankingRepository';
 import IUserCreateRepository from './domains/repositories/UserRepository';
+import { Time } from './domains/valueobjects/Time';
+import { UserName } from './domains/valueobjects/UserName';
 import RankingSQLiteFake from './infrastructures/sqlite/fakes/RankingSQLiteFake';
 import RankingSQLite from './infrastructures/sqlite/RankingSQLite';
 import UserCreateSQLite from './infrastructures/sqlite/UserSQLite';
@@ -52,12 +54,12 @@ app.get('/ranking/getAll', async (req: express.Request, res: express.Response) =
     try {
         const userCreateRepository: IUserCreateRepository = new UserCreateSQLite();
         await userCreateRepository.save(UserEntity.create('0', {
-            username: '',
+            username: UserName.create({ name: '' }),
             email: '',
             password: '',
             imageUrl: '',
-            createdAt: '',
-            updatedAt: '',
+            createdAt: Time.create({ date: '' }),
+            updatedAt: Time.create({ date: '' }),
         }));
         res.status(200).send('OK');
     } catch (error) {
