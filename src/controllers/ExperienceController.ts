@@ -1,5 +1,5 @@
 import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { ExperienceDto } from '../dto/ExperienceDto';
+import { ExperienceDto } from './dto/ExperienceDto';
 
 @JsonController()
 export class ExperienceController {

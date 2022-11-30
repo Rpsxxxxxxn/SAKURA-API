@@ -6,6 +6,7 @@ import { ExperienceController } from './controllers/ExperienceController';
 
 // Controller
 import { UserController } from './controllers/UserController';
+import { LoggingMiddleware } from './shared/middleware/LoggingMiddleware';
 
 const app = createExpressServer({
     routePrefix: '/api',
@@ -16,6 +17,7 @@ const app = createExpressServer({
         ServerListController,
         UserController,
     ],
+    middlewares: [LoggingMiddleware]
 });
 
 app.listen(3000);

@@ -1,5 +1,6 @@
-import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { ServerListDto } from '../dto/ServerListDto';
+import { Body, Delete, Get, JsonController, Param, Post, QueryParams, UseAfter } from "routing-controllers";
+import { LoggingMiddleware } from "../shared/middleware/LoggingMiddleware";
+import { ServerListDto } from './dto/ServerListDto';
 
 @JsonController()
 export class ServerListController {

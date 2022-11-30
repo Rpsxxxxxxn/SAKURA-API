@@ -1,4 +1,5 @@
-import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
+import { Response } from "express";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, Res } from "routing-controllers";
 import { UserEntity } from "../domains/entities/UserEntity";
 import { UserType } from "../domains/models/UserType";
 import IUserRepository from "../domains/repositories/UserRepository";
@@ -16,10 +17,22 @@ export class UserController {
      * @returns 
      */
     @Get('/users')
-    async getAll(@QueryParams() query: any) {
+    @OnUndefined(404)
+    async findAll(@QueryParams() query: any) {
         const userRepository: IUserRepository = new UserSQLite();
-        const datalist: UserEntity[] = await userRepository.findAll();
-        return datalist;
+        return await userRepository.findAll();
+    }
+
+    /**
+     * ユーザの取得
+     * @param query 
+     * @returns 
+     */
+    @Get('/users/:id')
+    @OnUndefined(404)
+    async find(@Param('id') id: number) {
+        const userRepository: IUserRepository = new UserSQLite();
+        return await userRepository.find(id);
     }
 
     /**
@@ -28,18 +41,18 @@ export class UserController {
      * @returns 
      */
     @Post('/users')
-    async update(@Body() body: UserDto) {
+    async update(@Body() body: UserDto, @Res() response: Response) {
         const userRepository: IUserRepository = new UserSQLite();
         await userRepository.save(UserEntity.create('', {
-            username: UserName.create({ name: '' }),
+            username: UserName.create({ name: body.username }),
             authority: Authority.create({ value: UserType.NORMAL }),
-            email: '',
-            password: '',
-            imageUrl: '',
+            email: body.email,
+            password: body.password,
+            imageUrl: body.imageUrl,
             createdAt: Time.create({date: new Date().toLocaleString()}),
             updatedAt: Time.create({date: new Date().toLocaleString()})
         }));
-        return {};
+        return response.send('OK');
     }
 
     /**

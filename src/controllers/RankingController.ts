@@ -1,5 +1,6 @@
-import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { RankingDto } from '../dto/RankingDto';
+import { Body, Delete, Get, JsonController, Param, Post, QueryParams, UseAfter } from "routing-controllers";
+import { LoggingMiddleware } from "../shared/middleware/LoggingMiddleware";
+import { RankingDto } from './dto/RankingDto';
 
 @JsonController()
 export class RankingController {

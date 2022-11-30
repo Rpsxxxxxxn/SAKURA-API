@@ -2,10 +2,10 @@ import { IsEmail, MinLength } from "class-validator";
 
 export class UserDto {
     @MinLength(3)
-    username?: string;
+    username!: string;
     @IsEmail()
-    email?: string;
+    email!: string;
     @MinLength(6)
-    password?: string;
-    imageUrl?: string;
+    password!: string;
+    imageUrl!: string;
 }
