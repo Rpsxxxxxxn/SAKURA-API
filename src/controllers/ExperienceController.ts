@@ -1,5 +1,5 @@
 import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { ExperienceForm } from './../forms/ExperienceForm';
+import { ExperienceDto } from '../dto/ExperienceDto';
 
 @JsonController()
 export class ExperienceController {
@@ -10,7 +10,7 @@ export class ExperienceController {
     }
 
     @Post('/experiences')
-    post(@Body() body: ExperienceForm) {
+    post(@Body() body: ExperienceDto) {
         console.log(body);
         return `post`;
     }

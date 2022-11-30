@@ -1,12 +1,12 @@
 import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
 
-export class ServerListForm {
+export class ServerListDto {
     @IsNotEmpty()
-    name!: string;
+    name?: string;
     @IsNotEmpty()
-    detail!: string;
+    detail?: string;
     @IsNotEmpty()
-    address!: string;
+    address?: string;
     @IsNotEmpty()
-    port!: string;
+    port?: string;
 }

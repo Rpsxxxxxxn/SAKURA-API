@@ -1,5 +1,5 @@
 import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { RankingForm } from './../forms/RankingForm';
+import { RankingDto } from '../dto/RankingDto';
 
 @JsonController()
 export class RankingController {
@@ -10,7 +10,7 @@ export class RankingController {
     }
 
     @Post('/rankings')
-    post(@Body() body: RankingForm) {
+    post(@Body() body: RankingDto) {
         console.log(body);
         return `post`;
     }

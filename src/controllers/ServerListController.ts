@@ -1,5 +1,5 @@
 import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
-import { ServerListForm } from './../forms/ServerListForm';
+import { ServerListDto } from '../dto/ServerListDto';
 
 @JsonController()
 export class ServerListController {
@@ -10,7 +10,7 @@ export class ServerListController {
     }
 
     @Post('/serverlist')
-    post(@Body() body: ServerListForm) {
+    post(@Body() body: ServerListDto) {
         console.log(body);
         return `post`;
     }

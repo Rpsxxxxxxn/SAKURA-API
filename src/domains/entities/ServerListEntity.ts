@@ -18,12 +18,4 @@ export class ServerListEntity extends Entity<number, ServerListProps> {
     public static create(id: number, props: ServerListProps): ServerListEntity {
         return new ServerListEntity(id, props);
     }
-
-    /**
-     * イコール
-     * @param obj 
-     */
-    public equals(obj?: Entity<number, ServerListProps>): boolean {
-        throw new Error("Method not implemented.");
-    }
 }
