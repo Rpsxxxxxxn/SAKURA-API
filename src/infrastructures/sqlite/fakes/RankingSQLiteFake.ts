@@ -13,14 +13,14 @@ class RankingSQLiteFake implements IRankingRepository {
         result.push(RankingEntity.create(1, {
             gamemode: '',
             username: UserName.create({ name: '' }),
-            mass: '',
+            mass: 0,
             createdAt: Time.create({date: new Date().toLocaleString()}),
             updatedAt: Time.create({date: new Date().toLocaleString()})
         }))
         result.push(RankingEntity.create(2, {
             gamemode: '',
             username: UserName.create({ name: '' }),
-            mass: '',
+            mass: 0,
             createdAt: Time.create({date: new Date().toLocaleString()}),
             updatedAt: Time.create({date: new Date().toLocaleString()})
         }))
@@ -36,19 +36,26 @@ class RankingSQLiteFake implements IRankingRepository {
         return RankingEntity.create(id, {
             gamemode: '',
             username: UserName.create({ name: '' }),
-            mass: '',
+            mass: 0,
             createdAt: Time.create({date: new Date().toLocaleString()}),
             updatedAt: Time.create({date: new Date().toLocaleString()})
         });
     }
-    
+
     /**
-     * ランキングの追加と更新
-     * @param model ランキングモデルデータ
+     * 追加を行う
+     * @param model RankingModel
      */
-    public async save(model: RankingEntity): Promise<void> {
+    public async insert(model: RankingEntity): Promise<void> {
         console.log(model);
-        console.log('RankingSQLiteFake.Saveが呼ばれた');
+    }
+
+    /**
+     * 更新を行う
+     * @param model RankingModel
+     */
+    public async update(model: RankingEntity): Promise<void> {
+        console.log(model);
     }
     
     /**

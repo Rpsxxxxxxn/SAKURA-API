@@ -1,4 +1,5 @@
 export interface Writer<Id, Entity> {
-    save(value: Entity): Promise<void>;
+    insert(value: Entity): Promise<void>;
+    update(value: Entity): Promise<void>;
     remove(id: Id): Promise<void>;
 }

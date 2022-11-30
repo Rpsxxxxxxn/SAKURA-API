@@ -12,20 +12,31 @@ class UserSQLite implements IUserRepository {
     public static readonly ALL_GET_SQL: string = '';
 
     /**
-     * 追加と更新を行う
+     * 追加を行う
      * @param model ユーザデータ
      */
-    public async save(model: UserEntity): Promise<void> {
-        const user = UserEntity.create('0', {
-            username: UserName.create({ name: '' }),
-            authority: Authority.create({ value: 0 }),
-            email: '',
-            password: '',
-            imageUrl: '',
-            createdAt: Time.create({ date: '' }),
-            updatedAt: Time.create({ date: '' }),
-        });
-        await SQLiteHelper.execute(UserSQLite.INSERT_SQL, user);
+    public async insert(model: UserEntity): Promise<void> {
+        await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
+            model.username,
+            model.authority,
+            model.password,
+            model.imageUrl,
+        ]);
+    }
+
+    /**
+     * 更新を行う
+     * @param model ユーザデータ
+     */
+    public async update(model: UserEntity): Promise<void> {
+        await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
+            model.id,
+            model.username,
+            model.authority,
+            model.password,
+            model.imageUrl,
+            Date.now()
+        ]);
     }
 
     /**
