@@ -2,6 +2,7 @@ import {RankingEntity} from "../../domains/entities/RankingEntity";
 import IRankingRepository from "../../domains/repositories/RankingRepository";
 import { Time } from "../../domains/valueobjects/Time";
 import { UserName } from "../../domains/valueobjects/UserName";
+import RankingSQLiteFake from "./fakes/RankingSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class RankingSQLite implements IRankingRepository {
@@ -65,6 +66,14 @@ class RankingSQLite implements IRankingRepository {
      */
     public async remove(id: number): Promise<void> {
         SQLiteHelper.execute(RankingSQLite.DELETE_SQL, id);
+    }
+
+    /**
+     * インスタンス生成
+     * @returns 
+     */
+    public static create(): IRankingRepository {
+        return process.env.NODE_ENV === 'prd' ? new RankingSQLite() : new RankingSQLiteFake();
     }
 }
 

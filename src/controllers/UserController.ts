@@ -13,7 +13,7 @@ import { UserDto } from './dto/UserDto';
 @JsonController()
 export class UserController {
     private userService: UserService = UserService.create();
-    private userRepository: IUserRepository = new UserSQLite();
+    private userRepository: IUserRepository = UserSQLite.create();
 
     /**
      * ユーザの全取得
@@ -22,7 +22,7 @@ export class UserController {
      */
     @Get('/users')
     @OnUndefined(404)
-    async findAll(@QueryParams() query: any) {
+    async findAll() {
         return await this.userRepository.findAll();
     }
 
@@ -46,14 +46,14 @@ export class UserController {
     async add(@Body() body: UserDto, @Res() response: Response) {
         const hashedPassword = this.userService.hashPassword(body.password);
 
-        const entity: UserEntity = UserEntity.create('', {
+        const entity: UserEntity = UserEntity.create(0, {
             username: UserName.create({ name: body.username }),
             authority: Authority.create({ value: UserType.NORMAL }),
             email: body.email,
             password: hashedPassword,
             imageUrl: body.imageUrl,
-            createdAt: Time.create({date: new Date().toLocaleString()}),
-            updatedAt: Time.create({date: new Date().toLocaleString()})
+            createdAt: Time.create({date: '' }),
+            updatedAt: Time.create({date: '' })
         })
         await this.userRepository.insert(entity);
         return response.send('OK');
@@ -66,7 +66,11 @@ export class UserController {
      */
     @Post('/users/update/:id')
     async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
-        const entity: UserEntity = UserEntity.create(id.toString(), {
+        const oldEntity: UserEntity = await this.userRepository.find(id);
+        if (!this.userService.comparePassword(body.password, oldEntity.password)) {
+            return response.send('パスワードが間違えています。');
+        }
+        await this.userRepository.update(UserEntity.create(id, {
             username: UserName.create({ name: body.username }),
             authority: Authority.create({ value: UserType.NORMAL }),
             email: body.email,
@@ -74,9 +78,8 @@ export class UserController {
             imageUrl: body.imageUrl,
             createdAt: Time.create({date: new Date().toLocaleString()}),
             updatedAt: Time.create({date: new Date().toLocaleString()})
-        })
-        await this.userRepository.update(entity);
-        return response.send('OK');
+        }));
+        return response.send('更新が完了しました。');
     }
 
     /**

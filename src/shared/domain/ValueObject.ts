@@ -19,15 +19,9 @@ abstract class ValueObject<T extends ValueObjectProps> {
      * @returns 
      */
     public equals(vo?: ValueObject<T>): boolean {
-        if (vo === null || vo === undefined) {
-            return false;
-        }
-        if (this.constructor.name !== vo.constructor.name) {
-            return false;
-        }
-        if (typeof vo.props !== "object" || vo.props === null) {
-            return false;
-        }
+        if (vo === null || vo === undefined) return false;
+        if (this.constructor.name !== vo.constructor.name) return false;
+        if (typeof vo.props !== "object" || vo.props === null) return false;
         return this.props === vo.props;
     }
 }

@@ -14,14 +14,14 @@ export interface UserProps {
     updatedAt: Time;
 }
 
-export class UserEntity extends Entity<string, UserProps> {
+export class UserEntity extends Entity<number, UserProps> {
     /**
      * インスタンス生成
      * @param id 
      * @param props 
      * @returns 
      */
-    public static create(id: string, props: UserProps) {
+    public static create(id: number, props: UserProps) {
         return new UserEntity(id, props);
     }
 

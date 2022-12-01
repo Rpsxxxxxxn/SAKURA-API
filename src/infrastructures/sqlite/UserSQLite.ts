@@ -1,8 +1,6 @@
 import {UserEntity} from "../../domains/entities/UserEntity";
 import IUserRepository from "../../domains/repositories/UserRepository";
-import { Authority } from "../../domains/valueobjects/Authority";
-import { Time } from "../../domains/valueobjects/Time";
-import { UserName } from "../../domains/valueobjects/UserName";
+import UserCreateSQLiteFake from "./fakes/UserSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class UserSQLite implements IUserRepository {
@@ -62,6 +60,14 @@ class UserSQLite implements IUserRepository {
     public async find(id: number): Promise<UserEntity> {
         if (id < 0) throw new Error('');
         return await SQLiteHelper.get(UserSQLite.ONE_GET_SQL);
+    }
+
+    /**
+     * インスタンス生成
+     * @returns 
+     */
+    public static create(): IUserRepository {
+        return process.env.NODE_ENV === 'prd' ? new UserSQLite() : new UserCreateSQLiteFake();
     }
 }
 
