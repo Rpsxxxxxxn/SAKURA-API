@@ -1,4 +1,4 @@
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, UseAfter } from "routing-controllers";
+import { Body, Delete, Get, JsonController, Param, Post, QueryParams, UseAfter } from "routing-controllers";
 import { ServerListDto } from './dto/ServerListDto';
 
 @JsonController()
@@ -9,7 +9,6 @@ export class ServerListController {
      * @returns 
      */
     @Get('/serverlist')
-    @OnUndefined(404)
     findAll(@QueryParams() query: any) {
         console.log(query);
         return `All`;

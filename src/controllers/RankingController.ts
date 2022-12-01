@@ -1,4 +1,4 @@
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams } from "routing-controllers";
+import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
 import { RankingDto } from './dto/RankingDto';
 
 @JsonController()
@@ -9,7 +9,6 @@ export class RankingController {
      * @returns 
      */
     @Get('/rankings')
-    @OnUndefined(404)
     getAll(@QueryParams() query: any) {
         console.log(query);
         return `All`;
