@@ -5,11 +5,19 @@ export interface AuthorityProps {
 }
 
 export class Authority extends ValueObject<AuthorityProps> {
-    static create(props: AuthorityProps): Authority {
-        return new Authority(props);
-    }
-
+    /**
+     * 種別の取得
+     */
     get type(): number {
         return this.props.value;
+    }
+
+    /**
+     * インスタンス生成
+     * @param props 
+     * @returns 
+     */
+    static create(props: AuthorityProps): Authority {
+        return new Authority(props);
     }
 }
