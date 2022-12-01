@@ -1,8 +1,5 @@
 import {UserEntity} from "../../domains/entities/UserEntity";
 import IUserRepository from "../../domains/repositories/UserRepository";
-import { Authority } from "../../domains/valueobjects/Authority";
-import { Time } from "../../domains/valueobjects/Time";
-import { UserName } from "../../domains/valueobjects/UserName";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class UserSQLite implements IUserRepository {
