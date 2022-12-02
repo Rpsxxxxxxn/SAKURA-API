@@ -5,7 +5,7 @@ import { UserName } from "../valueobjects/UserName";
 export interface RankingProps {
     gamemode: string;
     username: UserName;
-    mass: string;
+    mass: number;
     createdAt: Time;
     updatedAt: Time;
 }
@@ -42,7 +42,7 @@ export class RankingEntity extends Entity<number, RankingProps> {
     /**
      * 最高質量
      */
-    public get mass(): string { return this.props.mass; }
+    public get mass(): number { return this.props.mass; }
 
     /**
      * 生成日時

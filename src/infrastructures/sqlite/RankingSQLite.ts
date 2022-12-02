@@ -5,15 +5,18 @@ import { UserName } from "../../domains/valueobjects/UserName";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class RankingSQLite implements IRankingRepository {
-    private static readonly GETALL: string = 'SELECT * FROM sakura_topmass_ranking ORDER BY mass desc LIMIT 1;';
-    private static readonly GETONE: string = 'SELECT * FROM sakura_topmass_ranking ORDER BY mass desc WHERE id = ?;';
+    private static readonly GET_ALL_SQL: string = 'SELECT * FROM sakura_topmass_ranking ORDER BY mass desc;';
+    private static readonly GET_FIND_SQL: string = 'SELECT * FROM sakura_topmass_ranking WHERE id = ?;';
+    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_topmass_ranking VALUES();';
+    private static readonly UPDATE_SQL: string = '';
+    private static readonly DELETE_SQL: string = '';
 
     /**
      * 全てを取得
      * @returns Array<RankingModel>
      */
     public async findAll(): Promise<Array<RankingEntity>> {
-        const datalist = await SQLiteHelper.all(RankingSQLite.GETALL);
+        const datalist = await SQLiteHelper.all(RankingSQLite.GET_ALL_SQL);
         const result: Array<RankingEntity> = new Array<RankingEntity>();
         if (datalist) {
             for (const data of datalist) {
@@ -37,15 +40,23 @@ class RankingSQLite implements IRankingRepository {
      * @returns RankingModel
      */
     public async find(id: number): Promise<RankingEntity> {
-        return SQLiteHelper.get(RankingSQLite.GETONE, [id]);
+        return SQLiteHelper.get(RankingSQLite.GET_FIND_SQL, [id]);
     }
     
     /**
-     * ランキングの追加と更新
+     * ランキングの追加
      * @param model ランキングモデルデータ
      */
-    public async save(model: RankingEntity): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async insert(model: RankingEntity): Promise<void> {
+        await SQLiteHelper.execute(RankingSQLite.INSERT_SQL, model);
+    }
+    
+    /**
+     * ランキングの更新
+     * @param model ランキングモデルデータ
+     */
+    public async update(model: RankingEntity): Promise<void> {
+        await SQLiteHelper.execute(RankingSQLite.UPDATE_SQL, model);
     }
     
     /**
@@ -53,7 +64,7 @@ class RankingSQLite implements IRankingRepository {
      * @param id ランキングID
      */
     public async remove(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
+        SQLiteHelper.execute(RankingSQLite.DELETE_SQL, id);
     }
 }
 
