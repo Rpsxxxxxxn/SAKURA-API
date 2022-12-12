@@ -1,12 +1,12 @@
-import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, Matches, MinLength } from "class-validator";
 
 export class ServerListDto {
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'タイトルが入力されていません。' })
     name?: string;
-    @IsNotEmpty()
+    @IsNotEmpty({ message: '詳細が設定されていません。' })
     detail?: string;
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'IPアドレスが入力されていません。' })
     address?: string;
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'PORTが入力されていません。' })
     port?: string;
 }

@@ -7,10 +7,9 @@ import SQLiteHelper from "./helper/SQLiteHelper";
 
 class RankingSQLite implements IRankingRepository {
     private static readonly GET_ALL_SQL: string = 'SELECT * FROM sakura_topmass_ranking ORDER BY mass desc;';
-    private static readonly GET_FIND_SQL: string = 'SELECT * FROM sakura_topmass_ranking WHERE id = ?;';
+    private static readonly GET_ONE_SQL: string = 'SELECT * FROM sakura_topmass_ranking WHERE id = ?;';
     private static readonly INSERT_SQL: string = 'INSERT INTO sakura_topmass_ranking VALUES();';
-    private static readonly UPDATE_SQL: string = '';
-    private static readonly DELETE_SQL: string = '';
+    private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_topmass_ranking WHERE id = ?;';
 
     /**
      * 全てを取得
@@ -41,7 +40,7 @@ class RankingSQLite implements IRankingRepository {
      * @returns RankingModel
      */
     public async find(id: number): Promise<RankingEntity> {
-        return SQLiteHelper.get(RankingSQLite.GET_FIND_SQL, [id]);
+        return SQLiteHelper.get(RankingSQLite.GET_ONE_SQL, [id]);
     }
     
     /**
@@ -57,7 +56,8 @@ class RankingSQLite implements IRankingRepository {
      * @param model ランキングモデルデータ
      */
     public async update(model: RankingEntity): Promise<void> {
-        await SQLiteHelper.execute(RankingSQLite.UPDATE_SQL, model);
+        this.remove(model.id);
+        this.insert(model);
     }
     
     /**

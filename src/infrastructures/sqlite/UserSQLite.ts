@@ -27,14 +27,8 @@ class UserSQLite implements IUserRepository {
      * @param model ユーザデータ
      */
     public async update(model: UserEntity): Promise<void> {
-        await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
-            model.id,
-            model.username,
-            model.authority,
-            model.password,
-            model.imageUrl,
-            Date.now()
-        ]);
+        this.remove(model.id);
+        this.insert(model);
     }
 
     /**
