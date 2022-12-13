@@ -2,8 +2,7 @@ import { ExperienceEntity } from "../../domains/entities/ExperienceEntity";
 import IExperienceRepository from "../../domains/repositories/ExperienceRepository";
 import ExperienceSQLiteFake from "./fakes/ExperienceSQLiteFake";
 
-class ExperienceSQLite implements IExperienceRepository {
-    
+class ExperienceSQLite implements IExperienceRepository { 
     /**
      * 全件取得
      */

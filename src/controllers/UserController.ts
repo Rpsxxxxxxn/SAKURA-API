@@ -45,7 +45,6 @@ export class UserController {
     @Post('/users/add')
     public async add(@Body() body: UserDto, @Res() response: Response) {
         const hashedPassword = this.userService.hashPassword(body.password);
-
         const entity: UserEntity = UserEntity.create(0, {
             username: UserName.create({ name: body.username }),
             authority: Authority.create({ value: UserType.NORMAL }),

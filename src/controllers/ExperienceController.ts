@@ -1,6 +1,9 @@
 import { Response } from "express";
 import { Body, Delete, Get, JsonController, OnUndefined, Param, Params, Post, QueryParams, Res } from "routing-controllers";
+import { ExperienceEntity } from "../domains/entities/ExperienceEntity";
 import IExperienceRepository from "../domains/repositories/ExperienceRepository";
+import { Time } from "../domains/valueobjects/Time";
+import { UserName } from "../domains/valueobjects/UserName";
 import ExperienceSQLite from "../infrastructures/sqlite/ExperienceSQLite";
 import { ExperienceDto } from './dto/ExperienceDto';
 
@@ -16,6 +19,13 @@ export class ExperienceController {
     @Post('/experience')
     public async insert(@Body() body: ExperienceDto, @Res() response: Response) {
         console.log(body);
+        const experienceEntity: ExperienceEntity = ExperienceEntity.create(0, {
+            username: UserName.create({ name: body.username }),
+            mass: body.mass,
+            createdAt: Time.create({ date: '' }),
+            updatedAt: Time.create({ date: '' }),
+        });
+        await this.experienceRepository.insert(experienceEntity);
         return response.status(200).send(body);
     }
 
