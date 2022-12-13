@@ -2,11 +2,11 @@ import { IsEmail, IsNotEmpty, Matches, MinLength } from "class-validator";
 
 export class ServerListDto {
     @IsNotEmpty({ message: 'タイトルが入力されていません。' })
-    name?: string;
+    name!: string;
     @IsNotEmpty({ message: '詳細が設定されていません。' })
-    detail?: string;
+    detail!: string;
     @IsNotEmpty({ message: 'IPアドレスが入力されていません。' })
-    address?: string;
+    address!: string;
     @IsNotEmpty({ message: 'PORTが入力されていません。' })
-    port?: string;
+    port!: string;
 }

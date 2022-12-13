@@ -9,14 +9,14 @@ export interface ExperienceProps {
     updatedAt: Time;
 }
 
-export class ExperienceEntity extends Entity<string, ExperienceProps> {
+export class ExperienceEntity extends Entity<number, ExperienceProps> {
     /**
      * インスタンス生成
      * @param id 
      * @param props 
      * @returns 
      */
-    public static create(id: string, props: ExperienceProps) {
+    public static create(id: number, props: ExperienceProps) {
         return new ExperienceEntity(id, props);
     }
 

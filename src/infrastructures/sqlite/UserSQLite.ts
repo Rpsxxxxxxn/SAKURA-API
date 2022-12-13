@@ -4,10 +4,11 @@ import UserCreateSQLiteFake from "./fakes/UserSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class UserSQLite implements IUserRepository {
-    public static readonly INSERT_SQL: string = '';
-    public static readonly DELETE_SQL: string = '';
-    public static readonly ONE_GET_SQL: string = '';
-    public static readonly ALL_GET_SQL: string = '';
+    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_users(username, authority, password, imageUrl) VALUES(?, ?, ?, ?);';
+    public static readonly DELETE_SQL: string = 'DELETE sakura_users WHERE id=?;';
+    public static readonly UPDATE_SQL: string = 'UPDATE sakura_users SET username=?, password=?, imageUrl=? WHERE id=?;'
+    public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_users WHERE id=?;';
+    public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_users;';
 
     /**
      * 追加を行う
@@ -27,8 +28,12 @@ class UserSQLite implements IUserRepository {
      * @param model ユーザデータ
      */
     public async update(model: UserEntity): Promise<void> {
-        this.remove(model.id);
-        this.insert(model);
+        await SQLiteHelper.execute(UserSQLite.UPDATE_SQL, [
+            model.username,
+            model.authority,
+            model.password,
+            model.imageUrl,
+        ]);
     }
 
     /**
@@ -36,7 +41,7 @@ class UserSQLite implements IUserRepository {
      * @param id 
      */
     public async remove(id: number): Promise<void> {
-        if (id < 0) throw new Error('');
+        if (id < 0) throw new Error('IDが正常ではありません。');
         await SQLiteHelper.execute(UserSQLite.DELETE_SQL, id);
     }
 
@@ -52,7 +57,7 @@ class UserSQLite implements IUserRepository {
      * @param id ユーザID
      */
     public async find(id: number): Promise<UserEntity> {
-        if (id < 0) throw new Error('');
+        if (id < 0) throw new Error('IDが正常ではありません。');
         return await SQLiteHelper.get(UserSQLite.ONE_GET_SQL);
     }
 
