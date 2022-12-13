@@ -41,7 +41,16 @@ class RankingSQLite implements IRankingRepository {
      * @returns RankingModel
      */
     public async find(id: number): Promise<RankingEntity> {
-        return SQLiteHelper.get(RankingSQLite.GET_ONE_SQL, [id]);
+        const data: any = await SQLiteHelper.get(RankingSQLite.GET_ONE_SQL, [id]);
+        const result: RankingEntity = RankingEntity.create(
+            data.id, {
+            gamemode: data.gamemode,
+            username: UserName.create({ name: data.username }),
+            mass: data.mass,
+            createdAt: Time.create({date: data.created_at}),
+            updatedAt: Time.create({date: data.created_at}),
+        });
+        return result;
     }
     
     /**
@@ -74,7 +83,7 @@ class RankingSQLite implements IRankingRepository {
      * @param id ランキングID
      */
     public async remove(id: number): Promise<void> {
-        SQLiteHelper.execute(RankingSQLite.DELETE_SQL, id);
+        await SQLiteHelper.execute(RankingSQLite.DELETE_SQL, id);
     }
 
     /**

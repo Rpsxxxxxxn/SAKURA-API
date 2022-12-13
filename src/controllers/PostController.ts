@@ -1,30 +1,14 @@
+import { PostDto } from './dto/PostDto';
 import { Body, Delete, Get, JsonController, OnUndefined, Params, Post, Put } from "routing-controllers";
 import { PostEntity } from "../domains/entities/PostEntity";
 import IPostRepository from "../domains/repositories/PostRepository";
 import { Time } from "../domains/valueobjects/Time";
 import PostSQLite from "../infrastructures/sqlite/PostSQLite";
-import { PostDto } from "./dto/PostDto";
 
 @JsonController()
 export class PostController {
     private postRepository: IPostRepository = PostSQLite.create();
 
-    /**
-     * タスクの追加
-     * @param dto 
-     */
-    @Post('/post')
-    public async create(@Body() dto: PostDto) {
-        const postEntity = PostEntity.create(0, {
-            title: dto.title,
-            detail: dto.detail,
-            startDate: Time.create({ date: dto.startDate }),
-            endDate: Time.create({ date: dto.endDate }),
-            isSuccess: false,
-        })
-        this.postRepository.insert(postEntity);
-    }
-  
     /**
      * タスクの検索
      * @param id 
@@ -45,19 +29,35 @@ export class PostController {
     public async findAll() {
         return this.postRepository.findAll();
     }
+
+    /**
+     * タスクの追加
+     * @param body 
+     */
+    @Post('/post')
+    public async create(@Body() body: PostDto) {
+        const postEntity = PostEntity.create(0, {
+            title: body.title,
+            detail: body.detail,
+            startDate: Time.create({ date: body.startDate }),
+            endDate: Time.create({ date: body.endDate }),
+            isSuccess: body.isSuccess,
+        })
+        this.postRepository.insert(postEntity);
+    }
   
     /**
      * タスクの更新
-     * @param dto 
+     * @param body 
      */
     @Put('/post/update')
-    public async update(@Body() dto: PostDto) {
+    public async update(@Body() body: PostDto) {
         const postEntity = PostEntity.create(0, {
-            title: dto.title,
-            detail: dto.detail,
-            startDate: Time.create({ date: dto.startDate }),
-            endDate: Time.create({ date: dto.endDate }),
-            isSuccess: false,
+            title: body.title,
+            detail: body.detail,
+            startDate: Time.create({ date: body.startDate }),
+            endDate: Time.create({ date: body.endDate }),
+            isSuccess: body.isSuccess,
         })
         this.postRepository.update(postEntity);
     }

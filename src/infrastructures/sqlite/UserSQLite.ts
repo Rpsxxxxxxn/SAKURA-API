@@ -1,7 +1,10 @@
+import { Time } from './../../domains/valueobjects/Time';
+import { UserName } from './../../domains/valueobjects/UserName';
 import {UserEntity} from "../../domains/entities/UserEntity";
 import IUserRepository from "../../domains/repositories/UserRepository";
 import UserCreateSQLiteFake from "./fakes/UserSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
+import { Authority } from '../../domains/valueobjects/Authority';
 
 class UserSQLite implements IUserRepository {
     public static readonly INSERT_SQL: string = 'INSERT INTO sakura_users(username, authority, password, imageUrl) VALUES(?, ?, ?, ?);';
@@ -49,7 +52,23 @@ class UserSQLite implements IUserRepository {
      * ユーザの全取得
      */
     public async findAll(): Promise<UserEntity[]> {
-        return await SQLiteHelper.get(UserSQLite.ALL_GET_SQL);
+        const datalist: Array<any> = await SQLiteHelper.get(UserSQLite.ALL_GET_SQL);
+        const result: Array<UserEntity> = new Array<UserEntity>();
+        if (!datalist) return result;
+        for (const data of datalist) {
+            const rankingEntity = UserEntity.create(
+                data.id, {
+                username: UserName.create({ name: data.username }),
+                authority: Authority.create({ value: data.authority }),
+                email: data.email,
+                password: data.password,
+                imageUrl: data.image_url,
+                createdAt: Time.create({date: data.created_at}),
+                updatedAt: Time.create({date: data.updated_at}),
+            });
+            result.push(rankingEntity);
+        }
+        return result;
     }
 
     /**
@@ -58,7 +77,18 @@ class UserSQLite implements IUserRepository {
      */
     public async find(id: number): Promise<UserEntity> {
         if (id < 0) throw new Error('IDが正常ではありません。');
-        return await SQLiteHelper.get(UserSQLite.ONE_GET_SQL);
+        const data: any = await SQLiteHelper.get(UserSQLite.ONE_GET_SQL, [id]);
+        const result: UserEntity = UserEntity.create(
+            data.id, {
+            username: UserName.create({ name: data.username }),
+            authority: Authority.create({ value: data.authority }),
+            email: data.email,
+            password: data.password,
+            imageUrl: data.image_url,
+            createdAt: Time.create({date: data.created_at}),
+            updatedAt: Time.create({date: data.updated_at}),
+        });
+        return result;
     }
 
     /**

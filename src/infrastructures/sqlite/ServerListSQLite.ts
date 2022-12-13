@@ -24,7 +24,7 @@ class ServerListSQLite implements IServerListRepository {
      * @returns 
      */
     public async find(id: number): Promise<ServerListEntity> {
-        return await SQLiteHelper.get(ServerListSQLite.ONE_GET_SQL);
+        return await SQLiteHelper.get(ServerListSQLite.ONE_GET_SQL, [id]);
     }
 
     /**
