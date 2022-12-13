@@ -1,8 +1,10 @@
 import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
+import IExperienceRepository from "../domains/repositories/ExperienceRepository";
 import { ExperienceDto } from './dto/ExperienceDto';
 
 @JsonController()
 export class ExperienceController {
+    private experienceRepository: IExperienceRepository;
 
     /**
      * 経験値の設定
@@ -10,8 +12,9 @@ export class ExperienceController {
      * @returns 
      */
     @Post('/experiences')
-    post(@Body() body: ExperienceDto) {
+    insert(@Body() body: ExperienceDto) {
         console.log(body);
+        // this.experienceRepository.insert();
         return `post`;
     }
 
@@ -21,8 +24,9 @@ export class ExperienceController {
      * @returns 
      */
     @Delete('/experiences/:id')
-    delete(@Param('id') id: number) {
+    remove(@Param('id') id: number) {
         console.log(id);
-        return ``;
+        this.experienceRepository.remove(id);
+        return {};
     }
 }

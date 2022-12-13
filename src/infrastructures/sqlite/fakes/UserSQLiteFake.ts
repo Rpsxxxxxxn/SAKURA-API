@@ -6,7 +6,6 @@ import { UserName } from "../../../domains/valueobjects/UserName";
 import { Time } from '../../../domains/valueobjects/Time';
 
 class UserCreateSQLiteFake implements IUserCreateRepository {
-
     /**
      * ユーザの削除を行う
      * @param id 
@@ -20,7 +19,7 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
      */
     public async findAll(): Promise<UserEntity[]> {
         const users: UserEntity[] = new Array<UserEntity>();
-        users.push(UserEntity.create('0', {
+        users.push(UserEntity.create(0, {
             username: UserName.create({ name: 'TestUser1' }),
             authority: Authority.create({ value: UserType.NORMAL }),
             email: '',
@@ -29,7 +28,7 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
             createdAt: Time.create({ date: '2022/12/10 12:00:00' }),
             updatedAt: Time.create({ date: '2022/12/10 12:00:00' })
         }));
-        users.push(UserEntity.create('1', {
+        users.push(UserEntity.create(1, {
             username: UserName.create({ name: 'TestUser2' }),
             authority: Authority.create({ value: UserType.NORMAL }),
             email: '',
@@ -46,7 +45,7 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
      * @param id ユーザID
      */
     public async find(id: number): Promise<UserEntity> {
-        return UserEntity.create('0', {
+        return UserEntity.create(0, {
             username: UserName.create({ name: 'TestUser3' }),
             authority: Authority.create({ value: UserType.NORMAL }),
             email: '',

@@ -23,16 +23,23 @@ export class PostController {
   
     @Get('/post/:id')
     public read(@Params() id: number) {
-
+        return this.postRepository.findAll();
     }
   
     @Put('/post/update')
     public update(@Body() dto: PostDto) {
-
+        const postEntity = PostEntity.create(0, {
+            title: dto.title,
+            detail: dto.detail,
+            startDate: Time.create({ date: dto.startDate }),
+            endDate: Time.create({ date: dto.endDate }),
+            isSuccess: false,
+        })
+        this.postRepository.update(postEntity);
     }
   
     @Delete('/post/:id')
     public delete(@Params() id: number) {
-
+        this.postRepository.remove(id);
     }
 }
