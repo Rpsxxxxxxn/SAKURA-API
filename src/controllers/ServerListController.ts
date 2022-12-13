@@ -1,17 +1,21 @@
-import { Body, Delete, Get, JsonController, Param, Post, QueryParams, UseAfter } from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, UseAfter } from "routing-controllers";
+import IServerListRepository from "../domains/repositories/ServerListRepository";
+import ServerListSQLite from "../infrastructures/sqlite/ServerListSQLite";
 import { ServerListDto } from './dto/ServerListDto';
 
 @JsonController()
 export class ServerListController {
+    private serverlistRepository: IServerListRepository = ServerListSQLite.create();
+
     /**
      * サーバリスト全取得
      * @param query 
      * @returns 
      */
     @Get('/serverlist')
-    findAll(@QueryParams() query: any) {
-        console.log(query);
-        return `All`;
+    @OnUndefined(404)
+    public async findAll(@QueryParams() query: any) {
+        return await this.serverlistRepository.findAll();
     }
 
     /**
@@ -20,9 +24,9 @@ export class ServerListController {
      * @returns 
      */
     @Post('/serverlist')
-    post(@Body() body: ServerListDto) {
+    public async post(@Body() body: ServerListDto) {
         console.log(body);
-        return `post`;
+        return {};
     }
 
     /**
@@ -31,8 +35,14 @@ export class ServerListController {
      * @returns 
      */
     @Delete('/serverlist/:id')
-    delete(@Param('id') id: number) {
+    public async delete(@Param('id') id: number) {
         console.log(id);
-        return ``;
+        await this.serverlistRepository.remove(id);
+        return {};
+    }
+
+    @Get('/serverlist/healthCheck')
+    public async healthCheck() {
+        return {};
     }
 }

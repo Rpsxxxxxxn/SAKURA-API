@@ -1,17 +1,25 @@
-import { Body, Delete, Get, JsonController, Param, Post, QueryParams } from "routing-controllers";
+import { Request, Response } from "express";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, Req, Res } from "routing-controllers";
+import { RankingEntity } from "../domains/entities/RankingEntity";
+import IRankingRepository from "../domains/repositories/RankingRepository";
+import { Time } from "../domains/valueobjects/Time";
+import { UserName } from "../domains/valueobjects/UserName";
+import RankingSQLite from "../infrastructures/sqlite/RankingSQLite";
 import { RankingDto } from './dto/RankingDto';
 
 @JsonController()
 export class RankingController {
+    private rankingRepository: IRankingRepository = RankingSQLite.create();
+
     /**
      * ランキング全取得
      * @param query 
      * @returns 
      */
     @Get('/rankings')
-    getAll(@QueryParams() query: any) {
-        console.log(query);
-        return `All`;
+    @OnUndefined(404)
+    public async getAll(@QueryParams() query: any) {
+        return await this.rankingRepository.findAll();
     }
 
     /**
@@ -20,9 +28,16 @@ export class RankingController {
      * @returns 
      */
     @Post('/rankings')
-    post(@Body() body: RankingDto) {
-        console.log(body);
-        return `post`;
+    public async save(@Body() body: RankingDto, @Req() request: Request, @Res() response: Response) {
+        const rankingEntity = RankingEntity.create(0, {
+            gamemode: body.gamemode,
+            username: UserName.create({ name: body.username }),
+            mass: body.mass,
+            createdAt: Time.create({date: '' }),
+            updatedAt: Time.create({date: '' })
+        });
+        await this.rankingRepository.insert(rankingEntity);
+        return {};
     }
 
     /**
@@ -31,8 +46,9 @@ export class RankingController {
      * @returns 
      */
     @Delete('/rankings/:id')
-    delete(@Param('id') id: number) {
+    public async remove(@Param('id') id: number) {
         console.log(id);
-        return ``;
+        await this.rankingRepository.remove(id);
+        return {};
     }
 }

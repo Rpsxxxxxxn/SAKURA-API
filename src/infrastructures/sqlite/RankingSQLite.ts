@@ -10,6 +10,7 @@ class RankingSQLite implements IRankingRepository {
     private static readonly GET_ONE_SQL: string = 'SELECT * FROM sakura_topmass_ranking WHERE id = ?;';
     private static readonly INSERT_SQL: string = 'INSERT INTO sakura_topmass_ranking VALUES();';
     private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_topmass_ranking WHERE id = ?;';
+    private static readonly UPDATE_SQL: string = 'UPDATE * FROM sakura_topmass_ranking WHERE id = ?;';
 
     /**
      * 全てを取得
@@ -18,18 +19,18 @@ class RankingSQLite implements IRankingRepository {
     public async findAll(): Promise<Array<RankingEntity>> {
         const datalist = await SQLiteHelper.all(RankingSQLite.GET_ALL_SQL);
         const result: Array<RankingEntity> = new Array<RankingEntity>();
-        if (datalist) {
-            for (const data of datalist) {
-                const rankingEntity = RankingEntity.create(
-                    data.id, {
-                    gamemode: data.gamemode,
-                    username: UserName.create({ name: data.username }),
-                    mass: data.mass,
-                    createdAt: Time.create({date: data.created_at}),
-                    updatedAt: Time.create({date: data.created_at}),
-                });
-                result.push(rankingEntity);
-            }
+        // データがなければ早期リターン
+        if (!datalist) return result;
+        for (const data of datalist) {
+            const rankingEntity = RankingEntity.create(
+                data.id, {
+                gamemode: data.gamemode,
+                username: UserName.create({ name: data.username }),
+                mass: data.mass,
+                createdAt: Time.create({date: data.created_at}),
+                updatedAt: Time.create({date: data.created_at}),
+            });
+            result.push(rankingEntity);
         }
         return result;
     }
@@ -48,7 +49,11 @@ class RankingSQLite implements IRankingRepository {
      * @param model ランキングモデルデータ
      */
     public async insert(model: RankingEntity): Promise<void> {
-        await SQLiteHelper.execute(RankingSQLite.INSERT_SQL, model);
+        await SQLiteHelper.execute(RankingSQLite.INSERT_SQL, [
+            model.username,
+            model.gamemode,
+            model.mass
+        ]);
     }
     
     /**

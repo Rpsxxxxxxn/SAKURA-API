@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 export default class UserService {
     private static readonly SALT_OR_ROUNDS = 10;
 
-    constructor() {}
+    private constructor() {}
 
     /**
      * パスワードのハッシュ化

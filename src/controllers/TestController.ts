@@ -13,7 +13,7 @@ export class TestController {
      */
     @Get('/tests')
     @OnUndefined(404)
-    async tests() {
+    public async tests() {
         return { message: 'message' };
     }
 
@@ -22,7 +22,7 @@ export class TestController {
      * @param file 
      */
     @Post("/test/upload")
-    async upload(@UploadedFile("fileName") file: any) {
+    public async upload(@UploadedFile("fileName") file: any) {
         console.log(file);
     }
 
@@ -31,7 +31,7 @@ export class TestController {
      * @param id 
      */
     @Get('/test/:id')
-    async getId(@Param("id") id: number) {
+    public async getId(@Param("id") id: number) {
         console.log(id);
     }
 
@@ -42,7 +42,7 @@ export class TestController {
      * @returns 
      */
     @Get('/test/redirect')
-    async redirect(@Req() request: Request, @Res() response: Response) {
+    public async redirect(@Req() request: Request, @Res() response: Response) {
         console.log('IP: ' + request.ip);
         response.redirect('/users');
         return response;
