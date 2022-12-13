@@ -18,7 +18,7 @@ export class RankingController {
      */
     @Get('/rankings')
     @OnUndefined(404)
-    async getAll(@QueryParams() query: any) {
+    public async getAll(@QueryParams() query: any) {
         return await this.rankingRepository.findAll();
     }
 
@@ -28,7 +28,7 @@ export class RankingController {
      * @returns 
      */
     @Post('/rankings')
-    async save(@Body() body: RankingDto, @Req() request: Request, @Res() response: Response) {
+    public async save(@Body() body: RankingDto, @Req() request: Request, @Res() response: Response) {
         const rankingEntity = RankingEntity.create(0, {
             gamemode: body.gamemode,
             username: UserName.create({ name: body.username }),
@@ -46,7 +46,7 @@ export class RankingController {
      * @returns 
      */
     @Delete('/rankings/:id')
-    async remove(@Param('id') id: number) {
+    public async remove(@Param('id') id: number) {
         console.log(id);
         await this.rankingRepository.remove(id);
         return {};

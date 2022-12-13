@@ -14,7 +14,7 @@ export class ServerListController {
      */
     @Get('/serverlist')
     @OnUndefined(404)
-    async findAll(@QueryParams() query: any) {
+    public async findAll(@QueryParams() query: any) {
         return await this.serverlistRepository.findAll();
     }
 
@@ -24,7 +24,7 @@ export class ServerListController {
      * @returns 
      */
     @Post('/serverlist')
-    async post(@Body() body: ServerListDto) {
+    public async post(@Body() body: ServerListDto) {
         console.log(body);
         return {};
     }
@@ -35,14 +35,14 @@ export class ServerListController {
      * @returns 
      */
     @Delete('/serverlist/:id')
-    async delete(@Param('id') id: number) {
+    public async delete(@Param('id') id: number) {
         console.log(id);
         await this.serverlistRepository.remove(id);
         return {};
     }
 
     @Get('/serverlist/healthCheck')
-    async healthCheck() {
+    public async healthCheck() {
         return {};
     }
 }

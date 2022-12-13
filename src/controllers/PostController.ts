@@ -1,4 +1,4 @@
-import { Body, Delete, Get, JsonController, Params, Post, Put } from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Params, Post, Put } from "routing-controllers";
 import { PostEntity } from "../domains/entities/PostEntity";
 import IPostRepository from "../domains/repositories/PostRepository";
 import { Time } from "../domains/valueobjects/Time";
@@ -9,8 +9,12 @@ import { PostDto } from "./dto/PostDto";
 export class PostController {
     private postRepository: IPostRepository = PostSQLite.create();
 
+    /**
+     * タスクの追加
+     * @param dto 
+     */
     @Post('/post')
-    public create(@Body() dto: PostDto) {
+    public async create(@Body() dto: PostDto) {
         const postEntity = PostEntity.create(0, {
             title: dto.title,
             detail: dto.detail,
@@ -21,13 +25,33 @@ export class PostController {
         this.postRepository.insert(postEntity);
     }
   
+    /**
+     * タスクの検索
+     * @param id 
+     * @returns 
+     */
     @Get('/post/:id')
-    public read(@Params() id: number) {
+    @OnUndefined(404)
+    public async find(@Params() id: number) {
+        return this.postRepository.find(id);
+    }
+  
+    /**
+     * タスクの全件検索
+     * @returns 
+     */
+    @Get('/posts')
+    @OnUndefined(404)
+    public async findAll() {
         return this.postRepository.findAll();
     }
   
+    /**
+     * タスクの更新
+     * @param dto 
+     */
     @Put('/post/update')
-    public update(@Body() dto: PostDto) {
+    public async update(@Body() dto: PostDto) {
         const postEntity = PostEntity.create(0, {
             title: dto.title,
             detail: dto.detail,
@@ -38,8 +62,12 @@ export class PostController {
         this.postRepository.update(postEntity);
     }
   
+    /**
+     * タスクの削除
+     * @param id 
+     */
     @Delete('/post/:id')
-    public delete(@Params() id: number) {
+    public async delete(@Params() id: number) {
         this.postRepository.remove(id);
     }
 }

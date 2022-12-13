@@ -22,7 +22,7 @@ export class UserController {
      */
     @Get('/users')
     @OnUndefined(404)
-    async findAll() {
+    public async findAll() {
         return await this.userRepository.findAll();
     }
 
@@ -33,7 +33,7 @@ export class UserController {
      */
     @Get('/users/:id')
     @OnUndefined(404)
-    async find(@Param('id') id: number) {
+    public async find(@Param('id') id: number) {
         return await this.userRepository.find(id);
     }
 
@@ -43,7 +43,7 @@ export class UserController {
      * @returns 
      */
     @Post('/users/add')
-    async add(@Body() body: UserDto, @Res() response: Response) {
+    public async add(@Body() body: UserDto, @Res() response: Response) {
         const hashedPassword = this.userService.hashPassword(body.password);
 
         const entity: UserEntity = UserEntity.create(0, {
@@ -65,7 +65,7 @@ export class UserController {
      * @returns 
      */
     @Post('/users/update/:id')
-    async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
+    public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
         const oldEntity: UserEntity = await this.userRepository.find(id);
         if (!this.userService.comparePassword(body.password, oldEntity.password)) {
             return response.send('パスワードが間違えています。');
@@ -88,7 +88,7 @@ export class UserController {
      * @returns 
      */
     @Delete('/users/:id')
-    async delete(@Param('id') id: number) {
+    public async delete(@Param('id') id: number) {
         await this.userRepository.remove(id);
         return response.send('OK');
     }
