@@ -27,8 +27,8 @@ class RankingSQLite implements IRankingRepository {
                 gamemode: data.gamemode,
                 username: UserName.create({ name: data.username }),
                 mass: data.mass,
-                createdAt: Time.create({date: data.created_at}),
-                updatedAt: Time.create({date: data.created_at}),
+                createdAt: Time.create({value: data.created_at}),
+                updatedAt: Time.create({value: data.created_at}),
             });
             result.push(rankingEntity);
         }
@@ -47,8 +47,8 @@ class RankingSQLite implements IRankingRepository {
             gamemode: data.gamemode,
             username: UserName.create({ name: data.username }),
             mass: data.mass,
-            createdAt: Time.create({date: data.created_at}),
-            updatedAt: Time.create({date: data.created_at}),
+            createdAt: Time.create({value: data.created_at}),
+            updatedAt: Time.create({value: data.created_at}),
         });
         return result;
     }

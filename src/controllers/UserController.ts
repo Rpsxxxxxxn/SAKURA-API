@@ -1,5 +1,5 @@
 import { response, Response } from "express";
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, Res } from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, QueryParams, Res } from "routing-controllers";
 import { UserEntity } from "../domains/entities/UserEntity";
 import { UserType } from "../domains/models/UserType";
 import IUserRepository from "../domains/repositories/UserRepository";
@@ -10,7 +10,7 @@ import { UserName } from "../domains/valueobjects/UserName";
 import UserSQLite from "../infrastructures/sqlite/UserSQLite";
 import { UserDto } from './dto/UserDto';
 
-@JsonController()
+@JsonController('/user')
 export class UserController {
     private userService: UserService = UserService.create();
     private userRepository: IUserRepository = UserSQLite.create();
@@ -20,7 +20,7 @@ export class UserController {
      * @param query 
      * @returns 
      */
-    @Get('/users')
+    @Get('/all')
     @OnUndefined(404)
     public async findAll() {
         return await this.userRepository.findAll();
@@ -31,9 +31,10 @@ export class UserController {
      * @param query 
      * @returns 
      */
-    @Get('/users/:id')
+    @Get('/get/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
+        console.log(`ID: ${id}`);
         return await this.userRepository.find(id);
     }
 
@@ -42,7 +43,7 @@ export class UserController {
      * @param body 
      * @returns 
      */
-    @Post('/users/add')
+    @Post('/add')
     public async add(@Body() body: UserDto, @Res() response: Response) {
         const hashedPassword = this.userService.hashPassword(body.password);
         const entity: UserEntity = UserEntity.create(0, {
@@ -51,8 +52,8 @@ export class UserController {
             email: body.email,
             password: hashedPassword,
             imageUrl: body.imageUrl,
-            createdAt: Time.create({date: '' }),
-            updatedAt: Time.create({date: '' })
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         })
         await this.userRepository.insert(entity);
         return response.send('OK');
@@ -63,7 +64,7 @@ export class UserController {
      * @param body 
      * @returns 
      */
-    @Post('/users/update/:id')
+    @Post('/update/:id')
     public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
         const oldEntity: UserEntity = await this.userRepository.find(id);
         if (!this.userService.comparePassword(body.password, oldEntity.password)) {
@@ -75,8 +76,8 @@ export class UserController {
             email: body.email,
             password: body.password,
             imageUrl: body.imageUrl,
-            createdAt: Time.create({date: new Date().toLocaleString()}),
-            updatedAt: Time.create({date: new Date().toLocaleString()})
+            createdAt: Time.create({ value: oldEntity.createdAt }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         }));
         return response.send('更新が完了しました。');
     }
@@ -86,8 +87,15 @@ export class UserController {
      * @param id 
      * @returns 
      */
-    @Delete('/users/:id')
+    @Delete('/delete/:id')
     public async delete(@Param('id') id: number) {
+        console.log(`ID: ${id}`);
+        const entity: UserEntity = await this.userRepository.find(id);
+        // 管理者以外の場合
+        if (entity.authority !== UserType.ADMIN) {
+            return response.send('権限がありません。');
+        }
+        // 削除処理の実行
         await this.userRepository.remove(id);
         return response.send('OK');
     }

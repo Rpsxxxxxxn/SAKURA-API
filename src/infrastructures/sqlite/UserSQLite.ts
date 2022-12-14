@@ -63,8 +63,8 @@ class UserSQLite implements IUserRepository {
                 email: data.email,
                 password: data.password,
                 imageUrl: data.image_url,
-                createdAt: Time.create({date: data.created_at}),
-                updatedAt: Time.create({date: data.updated_at}),
+                createdAt: Time.create({value: data.created_at}),
+                updatedAt: Time.create({value: data.updated_at}),
             });
             result.push(rankingEntity);
         }
@@ -85,8 +85,8 @@ class UserSQLite implements IUserRepository {
             email: data.email,
             password: data.password,
             imageUrl: data.image_url,
-            createdAt: Time.create({date: data.created_at}),
-            updatedAt: Time.create({date: data.updated_at}),
+            createdAt: Time.create({value: data.created_at}),
+            updatedAt: Time.create({value: data.updated_at}),
         });
         return result;
     }

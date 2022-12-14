@@ -1,7 +1,7 @@
 import ValueObject from "../../shared/domain/ValueObject";
 
 export interface TimeProps {
-    date: string;
+    value: string;
 }
 
 export class Time extends ValueObject<TimeProps> {
@@ -9,7 +9,7 @@ export class Time extends ValueObject<TimeProps> {
      * 日時の取得
      */
     get date(): string {
-        return this.props.date;
+        return this.props.value;
     }
 
     /**

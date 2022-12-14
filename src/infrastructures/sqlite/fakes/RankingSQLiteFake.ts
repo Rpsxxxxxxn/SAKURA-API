@@ -14,15 +14,15 @@ class RankingSQLiteFake implements IRankingRepository {
             gamemode: '',
             username: UserName.create({ name: '' }),
             mass: 0,
-            createdAt: Time.create({date: new Date().toLocaleString()}),
-            updatedAt: Time.create({date: new Date().toLocaleString()})
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         }))
         result.push(RankingEntity.create(2, {
             gamemode: '',
             username: UserName.create({ name: '' }),
             mass: 0,
-            createdAt: Time.create({date: new Date().toLocaleString()}),
-            updatedAt: Time.create({date: new Date().toLocaleString()})
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         }))
         return result;
     }
@@ -37,8 +37,8 @@ class RankingSQLiteFake implements IRankingRepository {
             gamemode: '',
             username: UserName.create({ name: '' }),
             mass: 0,
-            createdAt: Time.create({date: new Date().toLocaleString()}),
-            updatedAt: Time.create({date: new Date().toLocaleString()})
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         });
     }
 

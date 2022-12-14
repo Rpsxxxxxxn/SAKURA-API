@@ -7,7 +7,7 @@ import { UserName } from "../domains/valueobjects/UserName";
 import ExperienceSQLite from "../infrastructures/sqlite/ExperienceSQLite";
 import { ExperienceDto } from './dto/ExperienceDto';
 
-@JsonController()
+@JsonController('/experience')
 export class ExperienceController {
     private experienceRepository: IExperienceRepository = ExperienceSQLite.create();
 
@@ -16,14 +16,14 @@ export class ExperienceController {
      * @param body 
      * @returns 
      */
-    @Post('/experience')
+    @Post('/add')
     public async insert(@Body() body: ExperienceDto, @Res() response: Response) {
         console.log(body);
         const experienceEntity: ExperienceEntity = ExperienceEntity.create(0, {
             username: UserName.create({ name: body.username }),
             mass: body.mass,
-            createdAt: Time.create({ date: '' }),
-            updatedAt: Time.create({ date: '' }),
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() }),
         });
         await this.experienceRepository.insert(experienceEntity);
         return response.status(200).send(body);
@@ -35,7 +35,7 @@ export class ExperienceController {
      * @param response 
      * @returns 
      */
-    @Get('/experience/:id')
+    @Get('/update/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number, @Res() response: Response) {
         console.log(id);
@@ -47,7 +47,7 @@ export class ExperienceController {
      * @param id 
      * @returns 
      */
-    @Delete('/experience/remove/:id')
+    @Delete('/remove/:id')
     public async remove(@Param('id') id: number) {
         console.log(id);
         this.experienceRepository.remove(id);
