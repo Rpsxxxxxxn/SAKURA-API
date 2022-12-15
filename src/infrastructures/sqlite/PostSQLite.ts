@@ -1,51 +1,60 @@
 import { PostEntity } from "../../domains/entities/PostEntity";
 import IPostRepository from "../../domains/repositories/PostRepository";
 import PostSQLiteFake from "./fakes/PostSQLiteFake";
+import SQLiteHelper from "./helper/SQLiteHelper";
 
 class PostSQLite implements IPostRepository {
+    private static readonly GET_ALL_SQL: string = 'SELECT * FROM sakura_user_task ORDER BY updatedAt desc;';
+    private static readonly GET_ONE_SQL: string = 'SELECT * FROM sakura_user_task WHERE user_id = ?;';
+    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_user_task(experience, top_mass) VALUES(?, ?)';
+    private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_user_task WHERE user_id = ?;';
+    private static readonly UPDATE_SQL: string = 'UPDATE sakura_user_task SET experience=?, top_mass=? WHERE user_id = ?;';
+
 
     /**
-     * タスクの全権検索
+     * 全件取得
+     * @returns {Promise<PostEntity[]>}
      */
-    findAll(): Promise<PostEntity[]> {
-        throw new Error("Method not implemented.");
+    public async findAll(): Promise<PostEntity[]> {
+        return await SQLiteHelper.all(PostSQLite.GET_ALL_SQL, []);
     }
 
     /**
-     * タスクの検索
-     * @param id 
+     * 一件取得
+     * @param {number} id 
+     * @returns {Promise<PostEntity>}
      */
-    find(id: number): Promise<PostEntity> {
-        throw new Error("Method not implemented.");
+    public async find(id: number): Promise<PostEntity> {
+        return await SQLiteHelper.get(PostSQLite.GET_ONE_SQL, []);
     }
 
     /**
-     * タスクの追加
-     * @param value 
+     * タスクの保存
+     * @param {PostEntity} value 
      */
-    insert(value: PostEntity): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async insert(value: PostEntity): Promise<void> {
+        await SQLiteHelper.execute(PostSQLite.INSERT_SQL, []);
     }
 
     /**
-     * タスク更新
-     * @param value 
+     * タスクの更新
+     * @param {PostEntity} value 
      */
-    update(value: PostEntity): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async update(value: PostEntity): Promise<void> {
+        await SQLiteHelper.execute(PostSQLite.UPDATE_SQL, []);
     }
 
     /**
-     * タスク削除
-     * @param id 
+     * タスクの削除
+     * @param {number} id 
      */
-    remove(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async remove(id: number): Promise<void> {
+        await SQLiteHelper.execute(PostSQLite.DELETE_SQL, [id]);
     }
 
     /**
      * インスタンス生成
-     * @returns 
+     * @returns {IPostRepository}
      */
      public static create(): IPostRepository {
         return process.env.NODE_ENV === 'prd' ? new PostSQLite() : new PostSQLiteFake();

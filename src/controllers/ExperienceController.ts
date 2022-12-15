@@ -16,7 +16,7 @@ export class ExperienceController {
      * @param body 
      * @returns 
      */
-    @Post('/add')
+    @Post('/insert')
     public async insert(@Body() body: ExperienceDto, @Res() response: Response) {
         console.log(body);
         const experienceEntity: ExperienceEntity = ExperienceEntity.create(0, {
@@ -35,7 +35,7 @@ export class ExperienceController {
      * @param response 
      * @returns 
      */
-    @Get('/update/:id')
+    @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number, @Res() response: Response) {
         console.log(id);

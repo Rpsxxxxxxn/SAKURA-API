@@ -19,7 +19,7 @@ export class UserController {
      * ユーザの全取得 
      * @returns {Array<UserEntity>} ユーザ情報配列
      */
-    @Get('/all')
+    @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
         return await this.userRepository.findAll();
@@ -30,7 +30,7 @@ export class UserController {
      * @param {number} id 検索したいユーザID 
      * @returns {Response}
      */
-    @Get('/get/:id')
+    @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
         console.log(`ID: ${id}`);
@@ -42,8 +42,8 @@ export class UserController {
      * @param {UserDto} body クライアント側から発行されたデータ
      * @returns {Response}
      */
-    @Post('/add')
-    public async add(@Body() body: UserDto, @Res() response: Response) {
+    @Post('/insert')
+    public async insert(@Body() body: UserDto, @Res() response: Response) {
         const hashedPassword = this.userService.hashPassword(body.password);
         const entity: UserEntity = UserEntity.create(0, {
             username: UserName.create({ name: body.username }),
@@ -86,8 +86,8 @@ export class UserController {
      * @param {number} id ユーザID
      * @returns {Response}
      */
-    @Delete('/delete/:id')
-    public async delete(@Param('id') id: number) {
+    @Delete('/remove/:id')
+    public async remove(@Param('id') id: number) {
         console.log(`ID: ${id}`);
         const entity: UserEntity = await this.userRepository.find(id);
         // 管理者以外の場合

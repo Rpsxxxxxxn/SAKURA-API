@@ -14,7 +14,7 @@ export class PostController {
      * @param id 
      * @returns 
      */
-    @Get('/get/:id')
+    @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Params() id: number) {
         return this.postRepository.find(id);
@@ -24,7 +24,7 @@ export class PostController {
      * タスクの全件検索
      * @returns 
      */
-    @Get('/all')
+    @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
         return this.postRepository.findAll();
@@ -34,7 +34,7 @@ export class PostController {
      * タスクの追加
      * @param body 
      */
-    @Post('/add')
+    @Post('/insert')
     public async insert(@Body() body: PostDto) {
         const postEntity = PostEntity.create(0, {
             title: body.title,
@@ -66,8 +66,8 @@ export class PostController {
      * タスクの削除
      * @param id 
      */
-    @Delete('/delete/:id')
-    public async delete(@Param('id') id: number) {
+    @Delete('/remove/:id')
+    public async remove(@Param('id') id: number) {
         this.postRepository.remove(id);
     }
 }

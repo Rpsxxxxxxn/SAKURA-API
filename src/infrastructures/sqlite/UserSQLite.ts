@@ -15,7 +15,7 @@ class UserSQLite implements IUserRepository {
 
     /**
      * 追加を行う
-     * @param model ユーザデータ
+     * @param {UserEntity} model ユーザデータ
      */
     public async insert(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
@@ -28,7 +28,7 @@ class UserSQLite implements IUserRepository {
 
     /**
      * 更新を行う
-     * @param model ユーザデータ
+     * @param {UserEntity} model ユーザデータ
      */
     public async update(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.UPDATE_SQL, [
@@ -41,7 +41,7 @@ class UserSQLite implements IUserRepository {
 
     /**
      * ユーザの削除を行う
-     * @param id 
+     * @param {number} id
      */
     public async remove(id: number): Promise<void> {
         if (id < 0) throw new Error('IDが正常ではありません。');
@@ -50,6 +50,7 @@ class UserSQLite implements IUserRepository {
 
     /**
      * ユーザの全取得
+     * @returns {Promise<UserEntity[]>} ユーザ情報配列
      */
     public async findAll(): Promise<UserEntity[]> {
         const datalist: Array<any> = await SQLiteHelper.get(UserSQLite.ALL_GET_SQL);
@@ -74,6 +75,7 @@ class UserSQLite implements IUserRepository {
     /**
      * ユーザ検索
      * @param id ユーザID
+     * @returns {Promise<UserEntity>} ユーザ情報
      */
     public async find(id: number): Promise<UserEntity> {
         if (id < 0) throw new Error('IDが正常ではありません。');
@@ -93,7 +95,7 @@ class UserSQLite implements IUserRepository {
 
     /**
      * インスタンス生成
-     * @returns 
+     * @returns {IUserRepository}
      */
     public static create(): IUserRepository {
         return process.env.NODE_ENV === 'prd' ? new UserSQLite() : new UserCreateSQLiteFake();

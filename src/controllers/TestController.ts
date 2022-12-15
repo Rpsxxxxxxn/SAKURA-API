@@ -24,7 +24,7 @@ export class TestController {
     /**
      * 追加
      */
-    @Post('/add')
+    @Post('/insert')
     public async insert() {
         this.testArray.push(`Profile${this.testArray.length}`);
     }

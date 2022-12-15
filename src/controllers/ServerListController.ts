@@ -13,9 +13,9 @@ export class ServerListController {
      * @param query 
      * @returns ServerListEntity[]
      */
-    @Get('/all')
+    @Get('/findAll')
     @OnUndefined(404)
-    public async findAll(@QueryParams() query: any) {
+    public async findAll() {
         return await this.serverlistRepository.findAll();
     }
 
@@ -24,7 +24,7 @@ export class ServerListController {
      * @param body ServerListDto
      * @returns 
      */
-    @Post('/add')
+    @Post('/insert')
     public async insert(@Body() body: ServerListDto) {
         const serverlistEntity: ServerListEntity = ServerListEntity.create(0, {
             name: body.name,
@@ -61,8 +61,8 @@ export class ServerListController {
      * @param id 
      * @returns 
      */
-    @Delete('/delete/:id')
-    public async delete(@Param('id') id: number) {
+    @Delete('/remove/:id')
+    public async remove(@Param('id') id: number) {
         console.log(id);
         await this.serverlistRepository.remove(id);
         return {};
