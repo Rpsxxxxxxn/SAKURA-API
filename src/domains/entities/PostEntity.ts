@@ -13,9 +13,9 @@ export interface PostProps {
 export class PostEntity extends Entity<number, PostProps> {
     /**
      * インスタンス生成
-     * @param id 
-     * @param props 
-     * @returns 
+     * @param id ID
+     * @param props 情報
+     * @returns {PostEntity} エンティティ
      */
     public static create(id: number, props: PostProps) {
         return new PostEntity(id, props);
@@ -31,26 +31,31 @@ export class PostEntity extends Entity<number, PostProps> {
 
     /**
      * ユーザ名
+     * @returns {string}
      */
      public get username(): string { return this.props.title; }
 
     /**
      * 詳細
+     * @returns {string}
      */
      public get detail(): string { return this.props.detail; }
 
     /**
      * 開始日時
+     * @returns {string}
      */
     public get startDate(): string { return this.props.startDate.date; }
 
     /**
      * 終了日時
+     * @returns {string}
      */
     public get endDate(): string { return this.props.endDate.date; }
 
     /**
      * 完了したタスク
+     * @returns {boolean}
      */
     public get isSuccess(): boolean { return this.props.isSuccess; }
 }

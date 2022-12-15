@@ -7,7 +7,7 @@ import { UserName } from "../domains/valueobjects/UserName";
 import RankingSQLite from "../infrastructures/sqlite/RankingSQLite";
 import { RankingDto } from './dto/RankingDto';
 
-@JsonController()
+@JsonController('/ranking')
 export class RankingController {
     private rankingRepository: IRankingRepository = RankingSQLite.create();
 
@@ -16,7 +16,7 @@ export class RankingController {
      * @param query 
      * @returns 
      */
-    @Get('/rankings')
+    @Get('/all')
     @OnUndefined(404)
     public async getAll(@QueryParams() query: any) {
         return await this.rankingRepository.findAll();
@@ -27,7 +27,7 @@ export class RankingController {
      * @param body 
      * @returns 
      */
-    @Post('/rankings')
+    @Post('/add')
     public async save(@Body() body: RankingDto, @Req() request: Request, @Res() response: Response) {
         const rankingEntity = RankingEntity.create(0, {
             gamemode: body.gamemode,

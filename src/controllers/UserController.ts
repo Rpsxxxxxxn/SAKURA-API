@@ -16,9 +16,8 @@ export class UserController {
     private userRepository: IUserRepository = UserSQLite.create();
 
     /**
-     * ユーザの全取得
-     * @param query 
-     * @returns 
+     * ユーザの全取得 
+     * @returns {Array<UserEntity>} ユーザ情報配列
      */
     @Get('/all')
     @OnUndefined(404)
@@ -28,8 +27,8 @@ export class UserController {
 
     /**
      * ユーザの取得
-     * @param query 
-     * @returns 
+     * @param {number} id 検索したいユーザID 
+     * @returns {Response}
      */
     @Get('/get/:id')
     @OnUndefined(404)
@@ -40,8 +39,8 @@ export class UserController {
 
     /**
      * ユーザの追加・更新
-     * @param body 
-     * @returns 
+     * @param {UserDto} body クライアント側から発行されたデータ
+     * @returns {Response}
      */
     @Post('/add')
     public async add(@Body() body: UserDto, @Res() response: Response) {
@@ -61,8 +60,8 @@ export class UserController {
 
     /**
      * ユーザの追加・更新
-     * @param body 
-     * @returns 
+     * @param {UserDto} body クライアント側から発行されたデータ
+     * @returns {Response}
      */
     @Post('/update/:id')
     public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
@@ -84,8 +83,8 @@ export class UserController {
 
     /**
      * ユーザの削除
-     * @param id 
-     * @returns 
+     * @param {number} id ユーザID
+     * @returns {Response}
      */
     @Delete('/delete/:id')
     public async delete(@Param('id') id: number) {
@@ -97,6 +96,6 @@ export class UserController {
         }
         // 削除処理の実行
         await this.userRepository.remove(id);
-        return response.send('OK');
+        return response.send('削除されました。');
     }
 }

@@ -35,7 +35,7 @@ export class PostController {
      * @param body 
      */
     @Post('/add')
-    public async create(@Body() body: PostDto) {
+    public async insert(@Body() body: PostDto) {
         const postEntity = PostEntity.create(0, {
             title: body.title,
             detail: body.detail,
