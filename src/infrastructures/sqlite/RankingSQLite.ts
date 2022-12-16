@@ -14,21 +14,21 @@ class RankingSQLite implements IRankingRepository {
 
     /**
      * 全てを取得
-     * @returns Array<RankingModel>
+     * @returns {Promise<Array<RankingEntity>>} ランキング情報配列
      */
     public async findAll(): Promise<Array<RankingEntity>> {
-        const datalist = await SQLiteHelper.all(RankingSQLite.GET_ALL_SQL);
         const result: Array<RankingEntity> = new Array<RankingEntity>();
-        // データがなければ早期リターン
+        const datalist = await SQLiteHelper.all(RankingSQLite.GET_ALL_SQL, []);
         if (!datalist) return result;
         for (const data of datalist) {
+            if (data.username === "") continue;
             const rankingEntity = RankingEntity.create(
                 data.id, {
                 gamemode: data.gamemode,
                 username: UserName.create({ name: data.username }),
                 mass: data.mass,
-                createdAt: Time.create({date: data.created_at}),
-                updatedAt: Time.create({date: data.created_at}),
+                createdAt: Time.create({ value: data.created_at }),
+                updatedAt: Time.create({ value: data.created_at }),
             });
             result.push(rankingEntity);
         }
@@ -37,8 +37,8 @@ class RankingSQLite implements IRankingRepository {
 
     /**
      * 一致するデータを取得
-     * @param id プレイヤーID
-     * @returns RankingModel
+     * @param {number} id プレイヤーID
+     * @returns {Promise<RankingEntity>} ランキングデータ
      */
     public async find(id: number): Promise<RankingEntity> {
         const data: any = await SQLiteHelper.get(RankingSQLite.GET_ONE_SQL, [id]);
@@ -47,15 +47,15 @@ class RankingSQLite implements IRankingRepository {
             gamemode: data.gamemode,
             username: UserName.create({ name: data.username }),
             mass: data.mass,
-            createdAt: Time.create({date: data.created_at}),
-            updatedAt: Time.create({date: data.created_at}),
+            createdAt: Time.create({value: data.created_at}),
+            updatedAt: Time.create({value: data.created_at}),
         });
         return result;
     }
     
     /**
      * ランキングの追加
-     * @param model ランキングモデルデータ
+     * @param {RankingEntity} model ランキングモデルデータ
      */
     public async insert(model: RankingEntity): Promise<void> {
         await SQLiteHelper.execute(RankingSQLite.INSERT_SQL, [
@@ -67,7 +67,7 @@ class RankingSQLite implements IRankingRepository {
     
     /**
      * ランキングの更新
-     * @param model ランキングモデルデータ
+     * @param {RankingEntity} model ランキングモデルデータ
      */
     public async update(model: RankingEntity): Promise<void> {
         await SQLiteHelper.execute(RankingSQLite.UPDATE_SQL, [
@@ -80,7 +80,7 @@ class RankingSQLite implements IRankingRepository {
     
     /**
      * ランキングの削除
-     * @param id ランキングID
+     * @param {number} id ランキングID
      */
     public async remove(id: number): Promise<void> {
         await SQLiteHelper.execute(RankingSQLite.DELETE_SQL, id);
@@ -88,7 +88,7 @@ class RankingSQLite implements IRankingRepository {
 
     /**
      * インスタンス生成
-     * @returns 
+     * @returns {IRankingRepository}
      */
     public static create(): IRankingRepository {
         return process.env.NODE_ENV === 'prd' ? new RankingSQLite() : new RankingSQLiteFake();

@@ -1,6 +1,7 @@
 import { IsDate, MinLength } from "class-validator";
 
 export class PostDto {
+    id!: number;
     @MinLength(1, { message: 'タイトルが入力されていません。' })
     title!: string;
     @MinLength(1, { message: '詳細情報が入力されていません。' })
@@ -10,4 +11,6 @@ export class PostDto {
     @IsDate({ message: '終了日時が指定されていません。' })
     endDate!: string;
     isSuccess!: boolean;
+    createdAt!: string;
+    updatedAt!: string;
 }

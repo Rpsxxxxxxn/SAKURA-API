@@ -2,14 +2,15 @@ import sqlite3, { RunResult, Statement } from 'sqlite3';
 import { join } from 'path';
 
 class SQLiteHelper {
-    public static readonly CONNECTION_URL = './sakura.db';
-    // public static readonly sqlite = new sqlite3.Database(join(__dirname, '.db'));
+    // public static readonly CONNECTION_URL = 'sakura.db';
+    public static readonly CONNECTION_URL = join(process.cwd(), 'dist/sakura.db');
+    // public static readonly sqlite = new sqlite3.Database(join(__dirname, 'sakura.db'));
 
     /**
      * SQL実行
-     * @param sql 
-     * @param params 
-     * @returns 
+     * @param {string} sql SQLクエリ
+     * @param {any} params 引き渡すパラメータ
+     * @returns {Promise<RunResult>}
      */
     static async execute(sql: string, ...params: any) {
         return new Promise<RunResult>((resolve, reject) => {
@@ -24,14 +25,14 @@ class SQLiteHelper {
 
     /**
      * SQL実行（取得）
-     * @param sql 
-     * @param params 
-     * @returns 
+     * @param {string} sql SQLクエリ
+     * @param {any} params 引き渡すパラメータ
+     * @returns {Promise<any>} 取得したパラメータ
      */
-    static async get(sql: string, ...params: any) {
+    static async get(sql: string, ...params: any[]) {
         return new Promise<any>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
-            db.get(sql, params, (result: Statement, err: Error | null, row: any) => {
+            db.get(sql, params, (err: Error | null, row: any) => {
                 if (err) throw err;
                 else resolve(row);
             });
@@ -41,14 +42,14 @@ class SQLiteHelper {
 
     /**
      * SQL実行（全取得）
-     * @param sql 
-     * @param params 
-     * @returns 
+     * @param {string} sql SQLクエリ
+     * @param {any} params 引き渡すパラメータ
+     * @returns {Promise<any[]>} 取得したパラメータ
      */
-    static async all(sql: string, ...params: any) {
+    static async all(sql: string, params: any[]) {
         return new Promise<any[]>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
-            db.all(sql, params, (result: Statement, err: Error | null, rows: any[]) => {
+            db.all(sql, params, (err: Error | null, rows: any[]) => {
                 if (err) throw err;
                 else resolve(rows);
             });

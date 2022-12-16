@@ -4,9 +4,9 @@ import ServerListSQLiteFake from './fakes/ServerListSQLiteFake';
 import SQLiteHelper from './helper/SQLiteHelper';
 
 class ServerListSQLite implements IServerListRepository {
-    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_serverlist() VALUES(?, ?, ?, ?);';
+    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_serverlist(name, detail, no, address, port) VALUES(?, ?, ?, ?);';
     public static readonly DELETE_SQL: string = 'DELETE sakura_serverlist WHERE id=?;';
-    public static readonly UPDATE_SQL: string = 'UPDATE sakura_serverlist SET username=?, password=?, imageUrl=? WHERE id=?;'
+    public static readonly UPDATE_SQL: string = 'UPDATE sakura_serverlist SET name=?, detail=?, address=?, port=? WHERE id=?;'
     public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_serverlist WHERE id=?;';
     public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_serverlist;';
 
@@ -15,7 +15,7 @@ class ServerListSQLite implements IServerListRepository {
      * @returns 
      */
     public async findAll(): Promise<ServerListEntity[]> {
-        return await SQLiteHelper.all(ServerListSQLite.ALL_GET_SQL);
+        return await SQLiteHelper.all(ServerListSQLite.ALL_GET_SQL, []);
     }
 
     /**

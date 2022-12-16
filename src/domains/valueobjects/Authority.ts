@@ -7,6 +7,7 @@ export interface AuthorityProps {
 export class Authority extends ValueObject<AuthorityProps> {
     /**
      * 種別の取得
+     * @returns {number}
      */
     get type(): number {
         return this.props.value;
@@ -14,8 +15,8 @@ export class Authority extends ValueObject<AuthorityProps> {
 
     /**
      * インスタンス生成
-     * @param props 
-     * @returns 
+     * @param {AuthorityProps} props
+     * @returns {Authority} インスタンス
      */
     static create(props: AuthorityProps): Authority {
         return new Authority(props);

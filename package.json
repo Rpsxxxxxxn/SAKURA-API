@@ -7,7 +7,10 @@
     "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts",
-    "server": "node dist/app.js"
+    "build-watch": "npx tsc --watch",
+    "server-prd": "NODE_ENV=prd node dist/app.js",
+    "server-stg": "NODE_ENV=stg node dist/app.js",
+    "server-evl": "NODE_ENV=evl node dist/app.js"
   },
   "author": "",
   "license": "ISC",

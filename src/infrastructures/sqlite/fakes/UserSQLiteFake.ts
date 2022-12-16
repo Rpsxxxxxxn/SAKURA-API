@@ -1,9 +1,9 @@
-import { UserType } from './../../../domains/models/UserType';
-import {UserEntity} from "../../../domains/entities/UserEntity";
+import { UserEntity } from "../../../domains/entities/UserEntity";
 import IUserCreateRepository from "../../../domains/repositories/UserRepository";
-import { Authority } from "../../../domains/valueobjects/Authority";
 import { UserName } from "../../../domains/valueobjects/UserName";
 import { Time } from '../../../domains/valueobjects/Time';
+import { Authority } from "../../../domains/valueobjects/Authority";
+import { UserType } from "../../../domains/models/UserType";
 
 class UserCreateSQLiteFake implements IUserCreateRepository {
     /**
@@ -25,8 +25,8 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
             email: '',
             password: '',
             imageUrl: '',
-            createdAt: Time.create({ date: '2022/12/10 12:00:00' }),
-            updatedAt: Time.create({ date: '2022/12/10 12:00:00' })
+            createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
+            updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         }));
         users.push(UserEntity.create(1, {
             username: UserName.create({ name: 'TestUser2' }),
@@ -34,8 +34,8 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
             email: '',
             password: '',
             imageUrl: '',
-            createdAt: Time.create({ date: '2022/12/10 12:00:00' }),
-            updatedAt: Time.create({ date: '2022/12/10 12:00:00' })
+            createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
+            updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         }));
         return users;
     }
@@ -51,8 +51,8 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
             email: '',
             password: '',
             imageUrl: '',
-            createdAt: Time.create({ date: '2022/12/10 12:00:00' }),
-            updatedAt: Time.create({ date: '2022/12/10 12:00:00' })
+            createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
+            updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         });
     }
 

@@ -5,23 +5,35 @@ import { Get, JsonController, OnUndefined, Param, Post, Req, Res, UploadedFile }
  * テストコントローラー
  * 適当にテストするためのやつ
  */
-@JsonController()
+@JsonController('/test')
 export class TestController {
+    private testArray: Array<string> = new Array<string>();
+
     /**
      * テスト取得
      * @returns 
      */
-    @Get('/tests')
-    @OnUndefined(404)
-    public async tests() {
-        return { message: 'message' };
+    @Get('/get')
+    public async get() {
+        return {
+            message: 'message',
+            data: this.testArray
+        };
+    }
+
+    /**
+     * 追加
+     */
+    @Post('/insert')
+    public async insert() {
+        this.testArray.push(`Profile${this.testArray.length}`);
     }
 
     /**
      * アップロードテスト
      * @param file 
      */
-    @Post("/test/upload")
+    @Post("/upload")
     public async upload(@UploadedFile("fileName") file: any) {
         console.log(file);
     }
@@ -30,7 +42,7 @@ export class TestController {
      * paramの取得
      * @param id 
      */
-    @Get('/test/:id')
+    @Get('/get/:id')
     public async getId(@Param("id") id: number) {
         console.log(id);
     }
@@ -41,7 +53,7 @@ export class TestController {
      * @param response 
      * @returns 
      */
-    @Get('/test/redirect')
+    @Get('/redirect')
     public async redirect(@Req() request: Request, @Res() response: Response) {
         console.log('IP: ' + request.ip);
         response.redirect('/users');
