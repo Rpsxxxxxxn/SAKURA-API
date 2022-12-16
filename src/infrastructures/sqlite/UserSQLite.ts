@@ -7,11 +7,11 @@ import SQLiteHelper from "./helper/SQLiteHelper";
 import { Authority } from '../../domains/valueobjects/Authority';
 
 class UserSQLite implements IUserRepository {
-    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_users(username, authority, password, imageUrl) VALUES(?, ?, ?, ?);';
-    public static readonly DELETE_SQL: string = 'DELETE sakura_users WHERE id=?;';
-    public static readonly UPDATE_SQL: string = 'UPDATE sakura_users SET username=?, password=?, imageUrl=? WHERE id=?;'
-    public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_users WHERE id=?;';
-    public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_users;';
+    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_account(username, email, password, imageUrl) VALUES(?, ?, ?, ?);';
+    public static readonly DELETE_SQL: string = 'DELETE sakura_account WHERE id=?;';
+    public static readonly UPDATE_SQL: string = 'UPDATE sakura_account SET username=?, email=?, password=?, imageUrl=? WHERE id=?;'
+    public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_account WHERE id=?;';
+    public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_account;';
 
     /**
      * 追加を行う
@@ -20,7 +20,7 @@ class UserSQLite implements IUserRepository {
     public async insert(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
             model.username,
-            model.authority,
+            model.email,
             model.password,
             model.imageUrl,
         ]);
@@ -33,7 +33,7 @@ class UserSQLite implements IUserRepository {
     public async update(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.UPDATE_SQL, [
             model.username,
-            model.authority,
+            model.email,
             model.password,
             model.imageUrl,
         ]);
@@ -53,7 +53,7 @@ class UserSQLite implements IUserRepository {
      * @returns {Promise<UserEntity[]>} ユーザ情報配列
      */
     public async findAll(): Promise<UserEntity[]> {
-        const datalist: Array<any> = await SQLiteHelper.get(UserSQLite.ALL_GET_SQL);
+        const datalist: Array<any> = await SQLiteHelper.all(UserSQLite.ALL_GET_SQL, []);
         const result: Array<UserEntity> = new Array<UserEntity>();
         if (!datalist) return result;
         for (const data of datalist) {

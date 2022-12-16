@@ -1,3 +1,4 @@
+import { RankingModel } from './../domains/models/RankingModel';
 import { Request, Response } from "express";
 import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, QueryParams, Req, Res } from "routing-controllers";
 import { RankingEntity } from "../domains/entities/RankingEntity";
@@ -14,18 +15,23 @@ export class RankingController {
     /**
      * ランキング全取得
      * @param query 
-     * @returns 
+     * @returns {Array<RankingDto>}
      */
     @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
-        return await this.rankingRepository.findAll();
+        const datalist: Array<RankingEntity> = await this.rankingRepository.findAll();
+        const result: Array<RankingDto> = new Array<RankingDto>;
+        for (const data of datalist) {
+            result.push(RankingModel.create(data).responseBody());
+        }
+        return result;
     }
 
     /**
      * ランキングの保存・更新
      * @param body 
-     * @returns 
+     * @returns {void}
      */
     @Post('/insert')
     public async insert(@Body() body: RankingDto, @Req() request: Request, @Res() response: Response) {
@@ -43,7 +49,7 @@ export class RankingController {
     /**
      * ランキングの個別削除
      * @param id 
-     * @returns 
+     * @returns {void}
      */
     @Delete('/remove/:id')
     public async remove(@Param('id') id: number) {

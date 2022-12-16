@@ -91,4 +91,5 @@ export class UserEntity extends Entity<number, UserProps> {
      * @returns {string}
       */
      public get updatedAt(): string { return this.props.updatedAt.date; }
+
 }

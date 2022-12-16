@@ -25,7 +25,7 @@ class PostSQLite implements IPostRepository {
      * @returns {Promise<PostEntity>}
      */
     public async find(id: number): Promise<PostEntity> {
-        return await SQLiteHelper.get(PostSQLite.GET_ONE_SQL, []);
+        return await SQLiteHelper.get(PostSQLite.GET_ONE_SQL, [id]);
     }
 
     /**

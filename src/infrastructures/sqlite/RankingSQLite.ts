@@ -21,6 +21,7 @@ class RankingSQLite implements IRankingRepository {
         const datalist = await SQLiteHelper.all(RankingSQLite.GET_ALL_SQL, []);
         if (!datalist) return result;
         for (const data of datalist) {
+            if (data.username === "") continue;
             const rankingEntity = RankingEntity.create(
                 data.id, {
                 gamemode: data.gamemode,

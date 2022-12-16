@@ -6,7 +6,7 @@ export interface UserNameProps {
 
 export class UserName extends ValueObject<UserNameProps> {
     private static readonly MAX_LENGTH = 30;
-    private static readonly MIN_LENGTH = 3;
+    private static readonly MIN_LENGTH = 0;
 
     /**
      * 名前の取得

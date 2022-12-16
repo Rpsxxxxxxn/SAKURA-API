@@ -2,8 +2,8 @@ import sqlite3, { RunResult, Statement } from 'sqlite3';
 import { join } from 'path';
 
 class SQLiteHelper {
-    // public static readonly CONNECTION_URL = './sakura.db';
-    public static readonly CONNECTION_URL = join(__dirname, 'sakura.db');
+    // public static readonly CONNECTION_URL = 'sakura.db';
+    public static readonly CONNECTION_URL = join(process.cwd(), 'dist/sakura.db');
     // public static readonly sqlite = new sqlite3.Database(join(__dirname, 'sakura.db'));
 
     /**
@@ -47,7 +47,6 @@ class SQLiteHelper {
      * @returns {Promise<any[]>} 取得したパラメータ
      */
     static async all(sql: string, params: any[]) {
-        console.log(SQLiteHelper.CONNECTION_URL);
         return new Promise<any[]>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
             db.all(sql, params, (err: Error | null, rows: any[]) => {

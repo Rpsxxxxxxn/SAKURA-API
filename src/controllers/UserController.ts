@@ -1,6 +1,7 @@
 import { response, Response } from "express";
 import { Body, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, QueryParams, Res } from "routing-controllers";
 import { UserEntity } from "../domains/entities/UserEntity";
+import { UserModel } from "../domains/models/UserModel";
 import { UserType } from "../domains/models/UserType";
 import IUserRepository from "../domains/repositories/UserRepository";
 import UserService from "../domains/services/UserService";
@@ -22,7 +23,12 @@ export class UserController {
     @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
-        return await this.userRepository.findAll();
+        const datalist: Array<UserEntity> = await this.userRepository.findAll();
+        const result: Array<UserDto> = new Array<UserDto>;
+        for (const data of datalist) {
+            result.push(UserModel.create(data).responseBody());
+        }
+        return result;
     }
 
     /**
@@ -34,7 +40,8 @@ export class UserController {
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
         console.log(`ID: ${id}`);
-        return await this.userRepository.find(id);
+        const user: UserEntity = await this.userRepository.find(id);
+        return UserModel.create(user).responseBody();
     }
 
     /**
