@@ -1,6 +1,5 @@
 import { Entity } from "../../shared/domain/Entity";
 import { Time } from "../valueobjects/Time";
-import { UserName } from "../valueobjects/UserName";
 
 export interface PostProps {
     title: string;
@@ -8,6 +7,8 @@ export interface PostProps {
     startDate: Time;
     endDate: Time;
     isSuccess: boolean;
+    createdAt: Time;
+    updatedAt: Time;
 }
 
 export class PostEntity extends Entity<number, PostProps> {
@@ -33,7 +34,7 @@ export class PostEntity extends Entity<number, PostProps> {
      * ユーザ名
      * @returns {string}
      */
-     public get username(): string { return this.props.title; }
+     public get title(): string { return this.props.title; }
 
     /**
      * 詳細
@@ -58,5 +59,17 @@ export class PostEntity extends Entity<number, PostProps> {
      * @returns {boolean}
      */
     public get isSuccess(): boolean { return this.props.isSuccess; }
+
+    /**
+     * 生成日時
+     * @returns {string}
+     */
+    public get createdAt(): string { return this.props.createdAt.date; }
+
+    /**
+     * 更新日時
+     * @returns {string}
+     */
+    public get updatedAt(): string { return this.props.updatedAt.date; }
 }
 

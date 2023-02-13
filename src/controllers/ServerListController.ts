@@ -45,6 +45,7 @@ export class ServerListController {
      */
     @Post('/update/:id')
     public async update(@Param('id') id: number, @Body() body: ServerListDto) {
+        console.log(`ServerList.UpdateId: ${id}`);
         const serverlistEntity: ServerListEntity = ServerListEntity.create(id, {
             name: body.name,
             detail: body.detail,
@@ -63,7 +64,7 @@ export class ServerListController {
      */
     @Delete('/remove/:id')
     public async remove(@Param('id') id: number) {
-        console.log(id);
+        console.log(`ServerList.RemoveId: ${id}`);
         await this.serverlistRepository.remove(id);
         return {};
     }

@@ -1,15 +1,15 @@
-version: '3'
+version: '3.8'
 services:
-  server-container:
+  webserver:
     container_name: sakura-api
-    image: alpine
+    image: node:alpine
     restart: always
     ports:
       - 8080:8080
     networks:
       - server-mysql
 
-  mysql-container:
+  database:
     container_name: mysql
     image: mysql:5.7
     restart: always

@@ -39,7 +39,7 @@ export class UserController {
     @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
-        console.log(`ID: ${id}`);
+        console.log(`User.FindId: ${id}`);
         const user: UserEntity = await this.userRepository.find(id);
         return UserModel.create(user).responseBody();
     }
@@ -58,8 +58,8 @@ export class UserController {
             email: body.email,
             password: hashedPassword,
             imageUrl: body.imageUrl,
-            createdAt: Time.create({ value: new Date().toISOString() }),
-            updatedAt: Time.create({ value: new Date().toISOString() })
+            createdAt: Time.create({ value: '' }),
+            updatedAt: Time.create({ value: '' })
         })
         await this.userRepository.insert(entity);
         return response.send('OK');
@@ -72,6 +72,7 @@ export class UserController {
      */
     @Post('/update/:id')
     public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
+        console.log(`User.UpdateId: ${id}`);
         const oldEntity: UserEntity = await this.userRepository.find(id);
         if (!this.userService.comparePassword(body.password, oldEntity.password)) {
             return response.send('パスワードが間違えています。');
@@ -82,8 +83,8 @@ export class UserController {
             email: body.email,
             password: body.password,
             imageUrl: body.imageUrl,
-            createdAt: Time.create({ value: oldEntity.createdAt }),
-            updatedAt: Time.create({ value: new Date().toISOString() })
+            createdAt: Time.create({ value: '' }),
+            updatedAt: Time.create({ value: '' })
         }));
         return response.send('更新が完了しました。');
     }
@@ -95,7 +96,7 @@ export class UserController {
      */
     @Delete('/remove/:id')
     public async remove(@Param('id') id: number) {
-        console.log(`ID: ${id}`);
+        console.log(`User.RemoveId: ${id}`);
         const entity: UserEntity = await this.userRepository.find(id);
         // 管理者以外の場合
         if (entity.authority !== UserType.ADMIN) {
