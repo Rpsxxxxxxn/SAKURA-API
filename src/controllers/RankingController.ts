@@ -39,8 +39,8 @@ export class RankingController {
             gamemode: body.gamemode,
             username: UserName.create({ name: body.username }),
             mass: body.mass,
-            createdAt: Time.create({value: new Date().toISOString() }),
-            updatedAt: Time.create({value: new Date().toISOString() })
+            createdAt: Time.create({value: '' }),
+            updatedAt: Time.create({value: '' })
         });
         await this.rankingRepository.insert(rankingEntity);
         return {};
