@@ -10,7 +10,6 @@ class PostSQLite implements IPostRepository {
     private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_user_task WHERE user_id = ?;';
     private static readonly UPDATE_SQL: string = 'UPDATE sakura_user_task SET experience=?, top_mass=? WHERE user_id = ?;';
 
-
     /**
      * 全件取得
      * @returns {Promise<PostEntity[]>}
