@@ -80,7 +80,7 @@ class ServerListSQLite implements IServerListRepository {
                 healthCheck: isConnected
             }));
         });
-        throw new Error('Method not implemented.');
+        console.log(newServerList);
     }
 
     /**

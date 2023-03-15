@@ -16,26 +16,11 @@ export class UserName extends ValueObject<UserNameProps> {
     }
 
     /**
-     * バリデーションチェック
-     * @param name 
-     * @returns 
-     */
-    private static isValidName(name: string) {
-        if (name.length > this.MIN_LENGTH && name.length < this.MAX_LENGTH) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * 生成処理
      * @param name 
      * @returns 
      */
     public static create(value: UserNameProps) {
-        if (!this.isValidName(value.name)) {
-            throw new Error(`Invalid Argument - userName:${value.name}`);
-        }
         return new UserName(value);
     }
 }

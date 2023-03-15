@@ -3,6 +3,7 @@ import { createExpressServer } from 'routing-controllers';
 import path from 'path';
 
 const app = createExpressServer({
+    cors: true,
     routePrefix: '/api',
     classTransformer: true,
     defaultErrorHandler: false,
@@ -12,3 +13,4 @@ const app = createExpressServer({
 });
 
 app.listen(3000);
+console.log("listen port: 3000");
