@@ -16,7 +16,7 @@ class SQLiteHelper {
         return new Promise<RunResult>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
             db.run(sql, params, (result: RunResult, err: Error | null) => {
-                if (err) throw err;
+                if (err) reject(err);
                 else resolve(result);
             });
             db.close();
@@ -33,7 +33,7 @@ class SQLiteHelper {
         return new Promise<any>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
             db.get(sql, params, (err: Error | null, row: any) => {
-                if (err) throw err;
+                if (err) reject(err);
                 else resolve(row);
             });
             db.close();
@@ -50,7 +50,7 @@ class SQLiteHelper {
         return new Promise<any[]>((resolve, reject) => {
             const db = new sqlite3.Database(SQLiteHelper.CONNECTION_URL);
             db.all(sql, params, (err: Error | null, rows: any[]) => {
-                if (err) throw err;
+                if (err) reject(err);
                 else resolve(rows);
             });
             db.close();

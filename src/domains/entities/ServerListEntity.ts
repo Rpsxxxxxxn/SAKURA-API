@@ -6,6 +6,7 @@ export interface ServerListProps {
     no: number;
     address: string;
     port: string;
+    healthCheck: boolean;
 }
 
 export class ServerListEntity extends Entity<number, ServerListProps> {
@@ -48,4 +49,9 @@ export class ServerListEntity extends Entity<number, ServerListProps> {
      * @returns {string}
      */
     public get port(): string { return this.props.port; }
+
+    /**
+     * ヘルスチェック
+     */
+    public get healthCheck(): boolean { return this.props.healthCheck; }
 }

@@ -67,7 +67,40 @@ class ServerListSQLite implements IServerListRepository {
      * サーバー正常確認
      */
     public async healthCheck(): Promise<void> {
+        const serverList = await this.findAll();
+        const newServerList: ServerListEntity[] = [];
+        serverList.forEach(async (server) => {
+            const isConnected = await this.checkWebsocketConnect(server.address, server.port);
+            newServerList.push(ServerListEntity.create(server.id, {
+                name: server.name,
+                detail: server.detail,
+                no: server.no,
+                address: server.address,
+                port: server.port,
+                healthCheck: isConnected
+            }));
+        });
         throw new Error('Method not implemented.');
+    }
+
+    /**
+     * サーバーの正常確認
+     * @param address 
+     * @param port 
+     * @returns 
+     */
+    private async checkWebsocketConnect(address: string, port: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            const webSocket = new WebSocket(`ws://${address}:${port}`);
+            webSocket.onopen = () => {
+                webSocket.close();
+                resolve(true);
+            }
+            webSocket.onerror = () => {
+                webSocket.close();
+                resolve(false);
+            }
+        });
     }
 
     /**

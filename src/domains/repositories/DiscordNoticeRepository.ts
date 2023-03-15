@@ -6,4 +6,9 @@ export default interface IDiscordNoticeRepository {
      * @returns {Promise<void>}
      */
     registRanking(value: RankingEntity): Promise<void>;
+
+    /**
+     * サーバー情報の登録を通知
+     */
+    serverInfo(): Promise<void>;
 }

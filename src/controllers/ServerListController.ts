@@ -32,6 +32,7 @@ export class ServerListController {
             no: 0,
             address: body.address,
             port: body.port,
+            healthCheck: false
         })
         await this.serverlistRepository.insert(serverlistEntity)
         return {};
@@ -52,6 +53,7 @@ export class ServerListController {
             no: 0,
             address: body.address,
             port: body.port,
+            healthCheck: false
         })
         await this.serverlistRepository.update(serverlistEntity);
         return {};
