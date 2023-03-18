@@ -1,15 +1,14 @@
 const mysql = require("mysql");
 
 export default class MySQLHelper {
-  constructor() {}
-
   public static async connect() {
     return new Promise((resolve, reject) => {
       const db = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "test",
+        host: process.env.SAKURA_API_DB_HOST,
+        port: process.env.SAKURA_API_DB_PORT,
+        user: process.env.SAKURA_API_DB_USER,
+        password: process.env.SAKURA_API_DB_PASSWORD,
+        database: process.env.SAKURA_API_DB_NAME,
       });
       db.connect((err: any) => {
         if (err) reject(err);

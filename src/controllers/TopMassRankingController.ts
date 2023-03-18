@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
+import { Body, Get, JsonController, OnUndefined, Post, Res } from "routing-controllers";
 import { RankingEntity } from "../domains/entities/RankingEntity";
 import { RankingModel } from '../domains/models/RankingModel';
 import IRankingRepository from "../domains/repositories/TopMassRankingRepository";
