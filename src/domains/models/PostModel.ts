@@ -19,7 +19,6 @@ export class PostModel {
         return {
             id: this.postEntity.id,
             title: this.postEntity.title,
-            detail: this.postEntity.detail,
             startDate: this.postEntity.startDate,
             endDate: this.postEntity.endDate,
             isSuccess: this.postEntity.isSuccess,

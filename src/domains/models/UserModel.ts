@@ -19,9 +19,7 @@ export class UserModel {
         return {
             id: this.userEntity.id,
             username: this.userEntity.username,
-            email: this.userEntity.email,
-            password: this.userEntity.password,
-            imageUrl: this.userEntity.imageUrl,
+            profileImageURL: this.userEntity.profileImageURL,
             createdAt: this.userEntity.createdAt,
             updatedAt: this.userEntity.updatedAt,
         }

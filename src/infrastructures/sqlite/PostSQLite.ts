@@ -4,18 +4,33 @@ import PostSQLiteFake from "./fakes/PostSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class PostSQLite implements IPostRepository {
-    private static readonly GET_ALL_SQL: string = 'SELECT * FROM sakura_user_task ORDER BY updatedAt desc;';
-    private static readonly GET_ONE_SQL: string = 'SELECT * FROM sakura_user_task WHERE user_id = ?;';
-    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_user_task(experience, top_mass) VALUES(?, ?)';
-    private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_user_task WHERE user_id = ?;';
-    private static readonly UPDATE_SQL: string = 'UPDATE sakura_user_task SET experience=?, top_mass=? WHERE user_id = ?;';
+    private static readonly ALL_SQL: string = 'SELECT * FROM sakura_tasks ORDER BY updatedAt desc;';
+    private static readonly ONE_SQL: string = 'SELECT * FROM sakura_tasks WHERE id = ?;';
+    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_tasks(title, startDate, endDate, isSuccess) VALUES(?, ?, ?, ?)';
+    private static readonly UPDATE_SQL: string = 'UPDATE sakura_tasks SET title=?, startDate=?, endDate=?, isSuccess=? WHERE id = ?;';
+    private static readonly DELETE_SQL: string = 'DELETE FROM sakura_tasks WHERE id = ?;';
 
     /**
      * 全件取得
      * @returns {Promise<PostEntity[]>}
      */
     public async findAll(): Promise<PostEntity[]> {
-        return await SQLiteHelper.all(PostSQLite.GET_ALL_SQL, []);
+        const posts = await SQLiteHelper.all(PostSQLite.ALL_SQL, []);
+        const result: Array<PostEntity> = new Array<PostEntity>();
+        if (!posts) {
+            return result;
+        }
+        posts.forEach((post: any) => {
+            result.push(PostEntity.create(post.id, {
+                title: post.title,
+                startDate: post.startDate,
+                endDate: post.endDate,
+                isSuccess: post.isSuccess,
+                createdAt: post.createdAt,
+                updatedAt: post.updatedAt,
+            }));
+        });
+        return result;
     }
 
     /**
@@ -24,7 +39,15 @@ class PostSQLite implements IPostRepository {
      * @returns {Promise<PostEntity>}
      */
     public async find(id: number): Promise<PostEntity> {
-        return await SQLiteHelper.get(PostSQLite.GET_ONE_SQL, [id]);
+        const post = await SQLiteHelper.get(PostSQLite.ONE_SQL, [id]);
+        return PostEntity.create(post.id, {
+            title: post.title,
+            startDate: post.startDate,
+            endDate: post.endDate,
+            isSuccess: post.isSuccess,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+        });
     }
 
     /**
@@ -32,7 +55,12 @@ class PostSQLite implements IPostRepository {
      * @param {PostEntity} value 
      */
     public async insert(value: PostEntity): Promise<void> {
-        await SQLiteHelper.execute(PostSQLite.INSERT_SQL, []);
+        await SQLiteHelper.execute(PostSQLite.INSERT_SQL, [
+            value.title,
+            value.startDate,
+            value.endDate,
+            value.isSuccess
+        ]);
     }
 
     /**
@@ -40,7 +68,13 @@ class PostSQLite implements IPostRepository {
      * @param {PostEntity} value 
      */
     public async update(value: PostEntity): Promise<void> {
-        await SQLiteHelper.execute(PostSQLite.UPDATE_SQL, []);
+        await SQLiteHelper.execute(PostSQLite.UPDATE_SQL, [
+            value.title,
+            value.startDate,
+            value.endDate,
+            value.isSuccess,
+            value.id
+        ]);
     }
 
     /**

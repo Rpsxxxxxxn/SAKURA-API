@@ -1,17 +1,16 @@
+import { UserEntity } from "../../domains/entities/UserEntity";
+import IUserRepository from "../../domains/repositories/UserRepository";
 import { Time } from './../../domains/valueobjects/Time';
 import { UserName } from './../../domains/valueobjects/UserName';
-import {UserEntity} from "../../domains/entities/UserEntity";
-import IUserRepository from "../../domains/repositories/UserRepository";
 import UserCreateSQLiteFake from "./fakes/UserSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
-import { Authority } from '../../domains/valueobjects/Authority';
 
 class UserSQLite implements IUserRepository {
-    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_account(username, email, password, imageUrl) VALUES(?, ?, ?, ?);';
-    public static readonly DELETE_SQL: string = 'DELETE sakura_account WHERE id=?;';
-    public static readonly UPDATE_SQL: string = 'UPDATE sakura_account SET username=?, email=?, password=?, imageUrl=? WHERE id=?;'
-    public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_account WHERE id=?;';
-    public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_account;';
+    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_user(uid, username, profileImageURL) VALUES(?, ?, ?);';
+    public static readonly UPDATE_SQL: string = 'UPDATE sakura_user SET username=?, profileImageURL=? WHERE id=?;'
+    public static readonly DELETE_SQL: string = 'DELETE sakura_user WHERE id=?;';
+    public static readonly ALL_SQL: string = 'SELECT * FROM sakura_user;';
+    public static readonly ONE_SQL: string = 'SELECT * FROM sakura_user WHERE id=?;';
 
     /**
      * 追加を行う
@@ -19,10 +18,9 @@ class UserSQLite implements IUserRepository {
      */
     public async insert(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
+            model.uid,
             model.username,
-            model.email,
-            model.password,
-            model.imageUrl,
+            model.profileImageURL,
         ]);
     }
 
@@ -33,9 +31,8 @@ class UserSQLite implements IUserRepository {
     public async update(model: UserEntity): Promise<void> {
         await SQLiteHelper.execute(UserSQLite.UPDATE_SQL, [
             model.username,
-            model.email,
-            model.password,
-            model.imageUrl,
+            model.profileImageURL,
+            model.id,
         ]);
     }
 
@@ -44,8 +41,10 @@ class UserSQLite implements IUserRepository {
      * @param {number} id
      */
     public async remove(id: number): Promise<void> {
-        if (id < 0) throw new Error('IDが正常ではありません。');
-        await SQLiteHelper.execute(UserSQLite.DELETE_SQL, id);
+        if (id < 0) {
+            throw new Error('IDが正常ではありません。');
+        }
+        await SQLiteHelper.execute(UserSQLite.DELETE_SQL, [id]);
     }
 
     /**
@@ -53,23 +52,22 @@ class UserSQLite implements IUserRepository {
      * @returns {Promise<UserEntity[]>} ユーザ情報配列
      */
     public async findAll(): Promise<UserEntity[]> {
-        const datalist: Array<any> = await SQLiteHelper.all(UserSQLite.ALL_GET_SQL, []);
-        const result: Array<UserEntity> = new Array<UserEntity>();
-        if (!datalist) return result;
-        for (const data of datalist) {
-            const rankingEntity = UserEntity.create(
-                data.id, {
-                username: UserName.create({ name: data.username }),
-                authority: Authority.create({ value: data.authority }),
-                email: data.email,
-                password: data.password,
-                imageUrl: data.image_url,
-                createdAt: Time.create({value: data.created_at}),
-                updatedAt: Time.create({value: data.updated_at}),
-            });
-            result.push(rankingEntity);
+        const userSQLiteList: Array<any> = await SQLiteHelper.all(UserSQLite.ALL_SQL, []);
+        const userEntityList: Array<UserEntity> = new Array<UserEntity>();
+        if (!userSQLiteList) {
+            return userEntityList;
         }
-        return result;
+        userSQLiteList.forEach((user: any) => {
+            const rankingEntity = UserEntity.create(user.id, {
+                uid: user.uid,
+                username: UserName.create({ name: user.username }),
+                profileImageURL: user.profileImageURL,
+                createdAt: Time.create({value: user.created_at}),
+                updatedAt: Time.create({value: user.updated_at})
+            });
+            userEntityList.push(rankingEntity);
+        });
+        return userEntityList;
     }
 
     /**
@@ -78,19 +76,18 @@ class UserSQLite implements IUserRepository {
      * @returns {Promise<UserEntity>} ユーザ情報
      */
     public async find(id: number): Promise<UserEntity> {
-        if (id < 0) throw new Error('IDが正常ではありません。');
-        const data: any = await SQLiteHelper.get(UserSQLite.ONE_GET_SQL, [id]);
-        const result: UserEntity = UserEntity.create(
-            data.id, {
-            username: UserName.create({ name: data.username }),
-            authority: Authority.create({ value: data.authority }),
-            email: data.email,
-            password: data.password,
-            imageUrl: data.image_url,
-            createdAt: Time.create({value: data.created_at}),
-            updatedAt: Time.create({value: data.updated_at}),
+        if (id < 0) {
+            throw new Error('IDが正常ではありません。');
+        }
+        const user: any = await SQLiteHelper.get(UserSQLite.ONE_SQL, [id]);
+        const userEntity: UserEntity = UserEntity.create(user.id, {
+            uid: user.uid,
+            username: UserName.create({ name: user.username }),
+            profileImageURL: user.profileImageURL,
+            createdAt: Time.create({value: user.created_at}),
+            updatedAt: Time.create({value: user.updated_at})
         });
-        return result;
+        return userEntity;
     }
 
     /**

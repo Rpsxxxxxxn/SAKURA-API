@@ -4,18 +4,18 @@ import ExperienceSQLiteFake from "./fakes/ExperienceSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class ExperienceSQLite implements IExperienceRepository {
-    private static readonly GET_ALL_SQL: string = 'SELECT * FROM sakura_experience ORDER BY mass desc;';
-    private static readonly GET_ONE_SQL: string = 'SELECT * FROM sakura_experience WHERE user_id = ?;';
-    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_experience(experience, top_mass) VALUES(?, ?)';
-    private static readonly DELETE_SQL: string = 'DELETE * FROM sakura_experience WHERE user_id = ?;';
-    private static readonly UPDATE_SQL: string = 'UPDATE sakura_experience SET experience=?, top_mass=? WHERE user_id = ?;';
+    private static readonly ALL_SQL: string = 'SELECT * FROM sakura_experience;';
+    private static readonly ONE_SQL: string = 'SELECT * FROM sakura_experience WHERE id = ?;';
+    private static readonly INSERT_SQL: string = 'INSERT INTO sakura_experience(experience) VALUES(?)';
+    private static readonly UPDATE_SQL: string = 'UPDATE sakura_experience SET experience=? WHERE id = ?;';
+    private static readonly DELETE_SQL: string = 'DELETE FROM sakura_experience WHERE id = ?;';
 
     /**
      * 全件取得
      * @returns {Promise<ExperienceEntity[]>}
      */
     public async findAll(): Promise<ExperienceEntity[]> {
-        return await SQLiteHelper.all(ExperienceSQLite.GET_ALL_SQL, []);
+        return await SQLiteHelper.all(ExperienceSQLite.ALL_SQL, []);
     }
 
     /**
@@ -24,7 +24,7 @@ class ExperienceSQLite implements IExperienceRepository {
      * @returns {Promise<ExperienceEntity>}
      */
     public async find(id: number): Promise<ExperienceEntity> {
-        return await SQLiteHelper.get(ExperienceSQLite.GET_ONE_SQL, []);
+        return await SQLiteHelper.get(ExperienceSQLite.ONE_SQL, [id]);
     }
 
     /**
@@ -32,7 +32,9 @@ class ExperienceSQLite implements IExperienceRepository {
      * @param {ExperienceEntity} value 
      */
     public async insert(value: ExperienceEntity): Promise<void> {
-        await SQLiteHelper.execute(ExperienceSQLite.INSERT_SQL, []);
+        await SQLiteHelper.execute(ExperienceSQLite.INSERT_SQL, [
+            value.experience
+        ]);
     }
 
     /**
@@ -40,7 +42,10 @@ class ExperienceSQLite implements IExperienceRepository {
      * @param {ExperienceEntity} value 
      */
     public async update(value: ExperienceEntity): Promise<void> {
-        await SQLiteHelper.execute(ExperienceSQLite.UPDATE_SQL, []);
+        await SQLiteHelper.execute(ExperienceSQLite.UPDATE_SQL, [
+            value.experience,
+            value.id
+        ]);
     }
 
     /**

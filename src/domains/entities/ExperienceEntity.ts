@@ -1,10 +1,8 @@
 import { Entity } from "../../shared/domain/Entity";
 import { Time } from "../valueobjects/Time";
-import { UserName } from "../valueobjects/UserName";
 
 export interface ExperienceProps {
-    username: UserName;
-    mass: number;
+    experience: number;
     createdAt: Time;
     updatedAt: Time;
 }
@@ -19,26 +17,11 @@ export class ExperienceEntity extends Entity<number, ExperienceProps> {
     public static create(id: number, props: ExperienceProps) {
         return new ExperienceEntity(id, props);
     }
-
-    /**
-     * ユーザ名の修正
-     * @param value 
-     */
-    public changeUsername(value: string): void {
-        this.props.username = UserName.create({ name: value });
-    }
-
-    /**
-     * ユーザ名
-     * @returns {string}
-     */
-     public get username(): string { return this.props.username.DisplayName; }
-
     /**
      * 最高質量
      * @returns {number}
      */
-     public get mass(): number { return this.props.mass; }
+     public get experience(): number { return this.props.experience; }
 
     /**
      * 生成日時

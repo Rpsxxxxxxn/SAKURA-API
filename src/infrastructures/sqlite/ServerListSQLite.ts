@@ -4,18 +4,18 @@ import ServerListSQLiteFake from './fakes/ServerListSQLiteFake';
 import SQLiteHelper from './helper/SQLiteHelper';
 
 class ServerListSQLite implements IServerListRepository {
-    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_serverlist(name, detail, no, address, port) VALUES(?, ?, ?, ?);';
+    public static readonly ALL_SQL: string = 'SELECT * FROM sakura_serverlist;';
+    public static readonly ONE_SQL: string = 'SELECT * FROM sakura_serverlist WHERE id=?;';
+    public static readonly INSERT_SQL: string = 'INSERT INTO sakura_serverlist(name, detail, gamemode, address, port) VALUES(?, ?, ?, ?, ?);';
+    public static readonly UPDATE_SQL: string = 'UPDATE sakura_serverlist SET name=?, detail=?, gamemode=?, address=?, port=? WHERE id=?;'
     public static readonly DELETE_SQL: string = 'DELETE sakura_serverlist WHERE id=?;';
-    public static readonly UPDATE_SQL: string = 'UPDATE sakura_serverlist SET name=?, detail=?, address=?, port=? WHERE id=?;'
-    public static readonly ONE_GET_SQL: string = 'SELECT * FROM sakura_serverlist WHERE id=?;';
-    public static readonly ALL_GET_SQL: string = 'SELECT * FROM sakura_serverlist;';
 
     /**
      * サーバ情報の全件取得
      * @returns 
      */
     public async findAll(): Promise<ServerListEntity[]> {
-        return await SQLiteHelper.all(ServerListSQLite.ALL_GET_SQL, []);
+        return await SQLiteHelper.all(ServerListSQLite.ALL_SQL, []);
     }
 
     /**
@@ -24,7 +24,7 @@ class ServerListSQLite implements IServerListRepository {
      * @returns 
      */
     public async find(id: number): Promise<ServerListEntity> {
-        return await SQLiteHelper.get(ServerListSQLite.ONE_GET_SQL, [id]);
+        return await SQLiteHelper.get(ServerListSQLite.ONE_SQL, [id]);
     }
 
     /**
@@ -35,7 +35,7 @@ class ServerListSQLite implements IServerListRepository {
         await SQLiteHelper.execute(ServerListSQLite.INSERT_SQL, [
             value.name,
             value.detail,
-            value.no,
+            value.gamemode,
             value.address,
             value.port
         ]);
@@ -49,9 +49,10 @@ class ServerListSQLite implements IServerListRepository {
         await SQLiteHelper.execute(ServerListSQLite.UPDATE_SQL, [
             value.name,
             value.detail,
-            value.no,
+            value.gamemode,
             value.address,
-            value.port
+            value.port,
+            value.id
         ])
     }
 
@@ -74,7 +75,7 @@ class ServerListSQLite implements IServerListRepository {
             newServerList.push(ServerListEntity.create(server.id, {
                 name: server.name,
                 detail: server.detail,
-                no: server.no,
+                gamemode: server.gamemode,
                 address: server.address,
                 port: server.port,
                 healthCheck: isConnected

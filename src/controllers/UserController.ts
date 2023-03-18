@@ -1,20 +1,19 @@
 import { response, Response } from "express";
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, QueryParams, Res } from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
 import { UserEntity } from "../domains/entities/UserEntity";
 import { UserModel } from "../domains/models/UserModel";
-import { UserType } from "../domains/models/UserType";
+import IFirebaseUserRepository from "../domains/repositories/FirebaseUserRepository";
 import IUserRepository from "../domains/repositories/UserRepository";
-import UserService from "../domains/services/UserService";
-import { Authority } from "../domains/valueobjects/Authority";
 import { Time } from "../domains/valueobjects/Time";
 import { UserName } from "../domains/valueobjects/UserName";
+import FirebaseUser from "../infrastructures/FirebaseUser";
 import UserSQLite from "../infrastructures/sqlite/UserSQLite";
 import { UserDto } from './dto/UserDto';
 
 @JsonController('/user')
 export class UserController {
-    private userService: UserService = UserService.create();
     private userRepository: IUserRepository = UserSQLite.create();
+    private firebaseRepository: IFirebaseUserRepository = FirebaseUser.create();
 
     /**
      * ユーザの全取得 
@@ -23,12 +22,12 @@ export class UserController {
     @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
-        const datalist: Array<UserEntity> = await this.userRepository.findAll();
-        const result: Array<UserDto> = new Array<UserDto>;
-        for (const data of datalist) {
-            result.push(UserModel.create(data).responseBody());
-        }
-        return result;
+        const userEntityList: Array<UserEntity> = await this.userRepository.findAll();
+        const userDtoList: Array<UserDto> = new Array<UserDto>;
+        userEntityList.forEach(user => {
+            userDtoList.push(UserModel.create(user).responseBody());
+        });
+        return userDtoList;
     }
 
     /**
@@ -39,9 +38,8 @@ export class UserController {
     @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
-        console.log(`User.FindId: ${id}`);
-        const user: UserEntity = await this.userRepository.find(id);
-        return UserModel.create(user).responseBody();
+        const userEntity: UserEntity = await this.userRepository.find(id);
+        return UserModel.create(userEntity).responseBody();
     }
 
     /**
@@ -50,14 +48,12 @@ export class UserController {
      * @returns {Response}
      */
     @Post('/insert')
-    public async insert(@Body() body: UserDto, @Res() response: Response) {
-        const hashedPassword = this.userService.hashPassword(body.password);
+    public async insert(@Param('accessToken') accessToken: string, @Body() body: UserDto, @Res() response: Response) {
+        const uid = await this.firebaseRepository.getUserIdForAccessToken(accessToken);
         const entity: UserEntity = UserEntity.create(0, {
+            uid: uid,
             username: UserName.create({ name: body.username }),
-            authority: Authority.create({ value: UserType.NORMAL }),
-            email: body.email,
-            password: hashedPassword,
-            imageUrl: body.imageUrl,
+            profileImageURL: body.profileImageURL,
             createdAt: Time.create({ value: '' }),
             updatedAt: Time.create({ value: '' })
         })
@@ -72,17 +68,11 @@ export class UserController {
      */
     @Post('/update/:id')
     public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
-        console.log(`User.UpdateId: ${id}`);
-        const oldEntity: UserEntity = await this.userRepository.find(id);
-        if (!this.userService.comparePassword(body.password, oldEntity.password)) {
-            return response.send('パスワードが間違えています。');
-        }
+        const user: UserEntity = await this.userRepository.find(id);
         await this.userRepository.update(UserEntity.create(id, {
             username: UserName.create({ name: body.username }),
-            authority: Authority.create({ value: UserType.NORMAL }),
-            email: body.email,
-            password: body.password,
-            imageUrl: body.imageUrl,
+            uid: user.uid,
+            profileImageURL: body.profileImageURL,
             createdAt: Time.create({ value: '' }),
             updatedAt: Time.create({ value: '' })
         }));
@@ -96,13 +86,6 @@ export class UserController {
      */
     @Delete('/remove/:id')
     public async remove(@Param('id') id: number) {
-        console.log(`User.RemoveId: ${id}`);
-        const entity: UserEntity = await this.userRepository.find(id);
-        // 管理者以外の場合
-        if (entity.authority !== UserType.ADMIN) {
-            return response.send('権限がありません。');
-        }
-        // 削除処理の実行
         await this.userRepository.remove(id);
         return response.send('削除されました。');
     }

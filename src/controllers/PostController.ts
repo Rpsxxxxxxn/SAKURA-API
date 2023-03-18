@@ -18,8 +18,8 @@ export class PostController {
     @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Params() id: number) {
-        const data: PostEntity = await this.postRepository.find(id);
-        return PostModel.create(data).responseBody();
+        const postEntity: PostEntity = await this.postRepository.find(id);
+        return PostModel.create(postEntity).responseBody();
     }
   
     /**
@@ -29,12 +29,12 @@ export class PostController {
     @Get('/findAll')
     @OnUndefined(404)
     public async findAll() {
-        const datalist: Array<PostEntity> = await this.postRepository.findAll();
-        const result: Array<PostDto> = new Array<PostDto>;
-        for (const data of datalist) {
-            result.push(PostModel.create(data).responseBody());
-        }
-        return result;
+        const postEntityList: Array<PostEntity> = await this.postRepository.findAll();
+        const postDtoList: Array<PostDto> = new Array<PostDto>;
+        postEntityList.forEach((postEntity) => {
+            postDtoList.push(PostModel.create(postEntity).responseBody());
+        });
+        return postDtoList;
     }
 
     /**
@@ -45,7 +45,6 @@ export class PostController {
     public async insert(@Body() body: PostDto) {
         const postEntity = PostEntity.create(0, {
             title: body.title,
-            detail: body.detail,
             startDate: Time.create({ value: body.startDate }),
             endDate: Time.create({ value: body.endDate }),
             isSuccess: body.isSuccess,
@@ -63,7 +62,6 @@ export class PostController {
     public async update(@Param('id') id: number, @Body() body: PostDto) {
         const postEntity = PostEntity.create(id, {
             title: body.title,
-            detail: body.detail,
             startDate: Time.create({ value: body.startDate }),
             endDate: Time.create({ value: body.endDate }),
             isSuccess: body.isSuccess,

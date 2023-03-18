@@ -1,14 +1,12 @@
-import { ExpressMiddlewareInterface, Middleware } from "routing-controllers";
+import { NextFunction } from "express";
+import { ExpressErrorMiddlewareInterface, Middleware } from "routing-controllers";
 
 @Middleware({ type: "before" })
-export class MaintenanceMiddleware implements ExpressMiddlewareInterface {
+export class MaintenanceMiddleware implements ExpressErrorMiddlewareInterface {
     /**
-     * メンテナンス状態であれば、APIは通せない
-     * @param request 
-     * @param response 
-     * @param next 
+     * メンテナンス状態であれば、APIは通せないようにする
      */
-    use(request: any, response: any, next: (err?: any) => any) {
+    error(error: any, request: Request, response: Response, next: NextFunction): void {
         console.log('do something...');
         next();
     }

@@ -3,7 +3,7 @@ import { Entity } from "../../shared/domain/Entity";
 export interface ServerListProps {
     name: string;
     detail: string;
-    no: number;
+    gamemode: string;
     address: string;
     port: string;
     healthCheck: boolean;
@@ -32,11 +32,8 @@ export class ServerListEntity extends Entity<number, ServerListProps> {
      */
     public get detail(): string { return this.props.detail; }
 
-    /**
-     * 番号
-     * @returns {number}
-     */
-    public get no(): number { return this.props.no; }
+
+    public get gamemode(): string { return this.props.gamemode; }
 
     /**
      * アドレス

@@ -3,7 +3,6 @@ import { Time } from "../valueobjects/Time";
 
 export interface PostProps {
     title: string;
-    detail: string;
     startDate: Time;
     endDate: Time;
     isSuccess: boolean;
@@ -34,13 +33,7 @@ export class PostEntity extends Entity<number, PostProps> {
      * ユーザ名
      * @returns {string}
      */
-     public get title(): string { return this.props.title; }
-
-    /**
-     * 詳細
-     * @returns {string}
-     */
-     public get detail(): string { return this.props.detail; }
+    public get title(): string { return this.props.title; }
 
     /**
      * 開始日時

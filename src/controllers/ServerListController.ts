@@ -29,7 +29,7 @@ export class ServerListController {
         const serverlistEntity: ServerListEntity = ServerListEntity.create(0, {
             name: body.name,
             detail: body.detail,
-            no: 0,
+            gamemode: body.gamemode,
             address: body.address,
             port: body.port,
             healthCheck: false
@@ -50,7 +50,7 @@ export class ServerListController {
         const serverlistEntity: ServerListEntity = ServerListEntity.create(id, {
             name: body.name,
             detail: body.detail,
-            no: 0,
+            gamemode: body.gamemode,
             address: body.address,
             port: body.port,
             healthCheck: false

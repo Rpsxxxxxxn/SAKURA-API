@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class RankingDto {
+export class TopMassRankingDto {
     id!: number;
     @IsNotEmpty({ message: 'ゲームモードが設定されていません。' })
     gamemode!: string;

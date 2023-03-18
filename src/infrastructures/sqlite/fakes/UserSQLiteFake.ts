@@ -1,9 +1,7 @@
 import { UserEntity } from "../../../domains/entities/UserEntity";
 import IUserCreateRepository from "../../../domains/repositories/UserRepository";
-import { UserName } from "../../../domains/valueobjects/UserName";
 import { Time } from '../../../domains/valueobjects/Time';
-import { Authority } from "../../../domains/valueobjects/Authority";
-import { UserType } from "../../../domains/models/UserType";
+import { UserName } from "../../../domains/valueobjects/UserName";
 
 class UserCreateSQLiteFake implements IUserCreateRepository {
     /**
@@ -20,20 +18,16 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
     public async findAll(): Promise<UserEntity[]> {
         const users: UserEntity[] = new Array<UserEntity>();
         users.push(UserEntity.create(0, {
+            uid: 'testuid',
             username: UserName.create({ name: 'TestUser1' }),
-            authority: Authority.create({ value: UserType.NORMAL }),
-            email: '',
-            password: '',
-            imageUrl: '',
+            profileImageURL: 'https://avatars.githubusercontent.com/u/59530997?v=4',
             createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
             updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         }));
         users.push(UserEntity.create(1, {
+            uid: 'testuid',
             username: UserName.create({ name: 'TestUser2' }),
-            authority: Authority.create({ value: UserType.NORMAL }),
-            email: '',
-            password: '',
-            imageUrl: '',
+            profileImageURL: 'https://avatars.githubusercontent.com/u/59530997?v=4',
             createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
             updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         }));
@@ -46,11 +40,9 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
      */
     public async find(id: number): Promise<UserEntity> {
         return UserEntity.create(0, {
+            uid: 'testuid',
             username: UserName.create({ name: 'TestUser3' }),
-            authority: Authority.create({ value: UserType.NORMAL }),
-            email: '',
-            password: '',
-            imageUrl: '',
+            profileImageURL: 'https://avatars.githubusercontent.com/u/59530997?v=4',
             createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
             updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
         });

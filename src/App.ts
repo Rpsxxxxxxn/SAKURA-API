@@ -2,6 +2,9 @@ import 'reflect-metadata';
 import { createExpressServer } from 'routing-controllers';
 import path from 'path';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = createExpressServer({
     cors: true,
     routePrefix: '/api',

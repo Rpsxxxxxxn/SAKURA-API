@@ -1,5 +1,5 @@
 import {RankingEntity} from "../../../domains/entities/RankingEntity";
-import IRankingRepository from "../../../domains/repositories/RankingRepository";
+import IRankingRepository from "../../../domains/repositories/TopMassRankingRepository";
 import { Time } from "../../../domains/valueobjects/Time";
 import { UserName } from "../../../domains/valueobjects/UserName";
 
