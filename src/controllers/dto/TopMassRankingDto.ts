@@ -1,7 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
 export class TopMassRankingDto {
-    id!: number;
     @IsNotEmpty({ message: 'ゲームモードが設定されていません。' })
     gamemode!: string;
     @IsNotEmpty({ message: 'ユーザ名が設定されていません。' })

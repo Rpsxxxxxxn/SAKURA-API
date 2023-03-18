@@ -1,6 +1,5 @@
 import { response, Response } from "express";
 import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
-import { UserEntity } from "../domains/entities/UserEntity";
 import { UserModel } from "../domains/models/UserModel";
 import IFirebaseUserRepository from "../domains/repositories/FirebaseUserRepository";
 import IUserRepository from "../domains/repositories/UserRepository";
@@ -8,6 +7,7 @@ import { Time } from "../domains/valueobjects/Time";
 import { UserName } from "../domains/valueobjects/UserName";
 import FirebaseUser from "../infrastructures/FirebaseUser";
 import UserSQLite from "../infrastructures/sqlite/UserSQLite";
+import { UserEntity } from './../domains/entities/UserEntity';
 import { UserDto } from './dto/UserDto';
 
 @JsonController('/user')
@@ -24,6 +24,9 @@ export class UserController {
     public async findAll() {
         const userEntityList: Array<UserEntity> = await this.userRepository.findAll();
         const userDtoList: Array<UserDto> = new Array<UserDto>;
+        if (!userEntityList) {
+            return response.status(404).send('ユーザが見つかりませんでした。');
+        }
         userEntityList.forEach(user => {
             userDtoList.push(UserModel.create(user).responseBody());
         });
@@ -39,6 +42,9 @@ export class UserController {
     @OnUndefined(404)
     public async find(@Param('id') id: number) {
         const userEntity: UserEntity = await this.userRepository.find(id);
+        if (!userEntity) {
+            return response.status(404).send('ユーザが見つかりませんでした。');
+        }
         return UserModel.create(userEntity).responseBody();
     }
 
@@ -47,18 +53,21 @@ export class UserController {
      * @param {UserDto} body クライアント側から発行されたデータ
      * @returns {Response}
      */
-    @Post('/insert')
-    public async insert(@Param('accessToken') accessToken: string, @Body() body: UserDto, @Res() response: Response) {
-        const uid = await this.firebaseRepository.getUserIdForAccessToken(accessToken);
-        const entity: UserEntity = UserEntity.create(0, {
+    @Post('/create/:idToken')
+    public async create(@Param('idToken') idToken: string, @Body() body: UserDto, @Res() response: Response) {
+        const uid = await this.firebaseRepository.getUidForIdToken(idToken);
+        if (!uid) {
+            return response.status(404).send('ユーザが見つかりませんでした。');
+        }
+        const userEntity: UserEntity = UserEntity.create(0, {
             uid: uid,
             username: UserName.create({ name: body.username }),
             profileImageURL: body.profileImageURL,
             createdAt: Time.create({ value: '' }),
             updatedAt: Time.create({ value: '' })
         })
-        await this.userRepository.insert(entity);
-        return response.send('OK');
+        await this.userRepository.insert(userEntity);
+        return response.status(201).send('登録が完了しました。');
     }
 
     /**
@@ -66,17 +75,21 @@ export class UserController {
      * @param {UserDto} body クライアント側から発行されたデータ
      * @returns {Response}
      */
-    @Post('/update/:id')
-    public async update(@Param('id') id: number, @Body() body: UserDto, @Res() response: Response) {
-        const user: UserEntity = await this.userRepository.find(id);
-        await this.userRepository.update(UserEntity.create(id, {
+    @Post('/update/:idToken')
+    public async update(@Param('idToken') idToken: string, @Body() body: UserDto, @Res() response: Response) {
+        const uid: string = await this.firebaseRepository.getUidForIdToken(idToken);
+        const userEntity: UserEntity = await this.userRepository.findUserIdByUid(uid);
+        if (!userEntity) {
+            return response.status(404).send('ユーザが見つかりませんでした。');
+        }
+        await this.userRepository.update(UserEntity.create(userEntity.id, {
             username: UserName.create({ name: body.username }),
-            uid: user.uid,
+            uid: userEntity.uid,
             profileImageURL: body.profileImageURL,
             createdAt: Time.create({ value: '' }),
             updatedAt: Time.create({ value: '' })
         }));
-        return response.send('更新が完了しました。');
+        return response.status(201).send('更新が完了しました。');
     }
 
     /**
@@ -84,9 +97,14 @@ export class UserController {
      * @param {number} id ユーザID
      * @returns {Response}
      */
-    @Delete('/remove/:id')
-    public async remove(@Param('id') id: number) {
-        await this.userRepository.remove(id);
-        return response.send('削除されました。');
+    @Delete('/remove/:idToken')
+    public async remove(@Param('idToken') idToken: string) {
+        const uid: string = await this.firebaseRepository.getUidForIdToken(idToken);
+        const userEntity: UserEntity = await this.userRepository.findUserIdByUid(uid);
+        if (!userEntity) {
+            return response.status(404).send('ユーザが見つかりませんでした。');
+        }
+        await this.userRepository.remove(userEntity.id);
+        return response.status(201).send('削除が完了しました。');
     }
 }

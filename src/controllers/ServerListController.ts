@@ -1,4 +1,5 @@
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, QueryParams, UseAfter } from "routing-controllers";
+import { Response } from "express";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
 import { ServerListEntity } from "../domains/entities/ServerListEntity";
 import IServerListRepository from "../domains/repositories/ServerListRepository";
 import ServerListSQLite from "../infrastructures/sqlite/ServerListSQLite";
@@ -15,8 +16,12 @@ export class ServerListController {
      */
     @Get('/findAll')
     @OnUndefined(404)
-    public async findAll() {
-        return await this.serverlistRepository.findAll();
+    public async findAll(@Res() response: Response) {
+        const serverlistEntityList: Array<ServerListEntity> = await this.serverlistRepository.findAll();
+        if (!serverlistEntityList) {
+            return response.status(404).send('サーバーが見つかりませんでした。');
+        }
+        return response.status(200).send(serverlistEntityList);
     }
 
     /**
@@ -25,7 +30,7 @@ export class ServerListController {
      * @returns 
      */
     @Post('/insert')
-    public async insert(@Body() body: ServerListDto) {
+    public async insert(@Body() body: ServerListDto, @Res() response: Response) {
         const serverlistEntity: ServerListEntity = ServerListEntity.create(0, {
             name: body.name,
             detail: body.detail,
@@ -35,7 +40,7 @@ export class ServerListController {
             healthCheck: false
         })
         await this.serverlistRepository.insert(serverlistEntity)
-        return {};
+        return response.status(200).send(body);
     }
 
     /**
@@ -45,8 +50,7 @@ export class ServerListController {
      * @returns 
      */
     @Post('/update/:id')
-    public async update(@Param('id') id: number, @Body() body: ServerListDto) {
-        console.log(`ServerList.UpdateId: ${id}`);
+    public async update(@Param('id') id: number, @Body() body: ServerListDto, @Res() response: Response) {
         const serverlistEntity: ServerListEntity = ServerListEntity.create(id, {
             name: body.name,
             detail: body.detail,
@@ -56,7 +60,7 @@ export class ServerListController {
             healthCheck: false
         })
         await this.serverlistRepository.update(serverlistEntity);
-        return {};
+        return response.status(200).send(body);
     }
 
     /**
@@ -65,10 +69,9 @@ export class ServerListController {
      * @returns 
      */
     @Delete('/remove/:id')
-    public async remove(@Param('id') id: number) {
-        console.log(`ServerList.RemoveId: ${id}`);
+    public async remove(@Param('id') id: number, @Res() response: Response) {
         await this.serverlistRepository.remove(id);
-        return {};
+        return response.status(200).send('削除が完了しました。');
     }
 
     /**
@@ -76,7 +79,7 @@ export class ServerListController {
      * @returns 
      */
     @Get('/healthCheck')
-    public async healthCheck() {
-        return {};
+    public async healthCheck(@Res() response: Response) {
+        return response.status(200).send('ヘルスチェックが完了しました。');
     }
 }

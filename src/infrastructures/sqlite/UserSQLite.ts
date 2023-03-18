@@ -11,17 +11,18 @@ class UserSQLite implements IUserRepository {
     public static readonly DELETE_SQL: string = 'DELETE sakura_user WHERE id=?;';
     public static readonly ALL_SQL: string = 'SELECT * FROM sakura_user;';
     public static readonly ONE_SQL: string = 'SELECT * FROM sakura_user WHERE id=?;';
+    public static readonly ONE_UID_SQL: string = 'SELECT * FROM sakura_user WHERE uid=?;';
 
     /**
      * 追加を行う
      * @param {UserEntity} model ユーザデータ
      */
     public async insert(model: UserEntity): Promise<void> {
-        await SQLiteHelper.execute(UserSQLite.INSERT_SQL, [
+        await SQLiteHelper.execute(UserSQLite.INSERT_SQL,
             model.uid,
             model.username,
             model.profileImageURL,
-        ]);
+        );
     }
 
     /**
@@ -29,11 +30,11 @@ class UserSQLite implements IUserRepository {
      * @param {UserEntity} model ユーザデータ
      */
     public async update(model: UserEntity): Promise<void> {
-        await SQLiteHelper.execute(UserSQLite.UPDATE_SQL, [
+        await SQLiteHelper.execute(UserSQLite.UPDATE_SQL,
             model.username,
             model.profileImageURL,
             model.id,
-        ]);
+        );
     }
 
     /**
@@ -44,7 +45,7 @@ class UserSQLite implements IUserRepository {
         if (id < 0) {
             throw new Error('IDが正常ではありません。');
         }
-        await SQLiteHelper.execute(UserSQLite.DELETE_SQL, [id]);
+        await SQLiteHelper.execute(UserSQLite.DELETE_SQL, id);
     }
 
     /**
@@ -80,6 +81,23 @@ class UserSQLite implements IUserRepository {
             throw new Error('IDが正常ではありません。');
         }
         const user: any = await SQLiteHelper.get(UserSQLite.ONE_SQL, [id]);
+        const userEntity: UserEntity = UserEntity.create(user.id, {
+            uid: user.uid,
+            username: UserName.create({ name: user.username }),
+            profileImageURL: user.profileImageURL,
+            createdAt: Time.create({value: user.created_at}),
+            updatedAt: Time.create({value: user.updated_at})
+        });
+        return userEntity;
+    }
+
+    /**
+     * ユーザ検索
+     * @param uid 
+     * @returns 
+     */
+    public async findUserIdByUid(uid: string): Promise<UserEntity> {
+        const user: any = await SQLiteHelper.get(UserSQLite.ONE_UID_SQL, [uid]);
         const userEntity: UserEntity = UserEntity.create(user.id, {
             uid: user.uid,
             username: UserName.create({ name: user.username }),

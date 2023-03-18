@@ -3,7 +3,7 @@ import IRankingRepository from "../../../domains/repositories/TopMassRankingRepo
 import { Time } from "../../../domains/valueobjects/Time";
 import { UserName } from "../../../domains/valueobjects/UserName";
 
-class RankingSQLiteFake implements IRankingRepository {
+class TopMassRankingSQLiteFake implements IRankingRepository {
     /**
      * 全てを取得
      * @returns Array<RankingModel>
@@ -64,8 +64,8 @@ class RankingSQLiteFake implements IRankingRepository {
      */
     public async remove(id: number): Promise<void> {
         console.log(id);
-        console.log('RankingSQLiteFake.Removeが呼ばれた');
+        console.log('TopMassRankingSQLiteFake.Removeが呼ばれた');
     }
 }
 
-export default RankingSQLiteFake;
+export default TopMassRankingSQLiteFake;

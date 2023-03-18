@@ -55,12 +55,12 @@ class PostSQLite implements IPostRepository {
      * @param {PostEntity} value 
      */
     public async insert(value: PostEntity): Promise<void> {
-        await SQLiteHelper.execute(PostSQLite.INSERT_SQL, [
+        await SQLiteHelper.execute(PostSQLite.INSERT_SQL, 
             value.title,
             value.startDate,
             value.endDate,
             value.isSuccess
-        ]);
+        );
     }
 
     /**
@@ -68,13 +68,13 @@ class PostSQLite implements IPostRepository {
      * @param {PostEntity} value 
      */
     public async update(value: PostEntity): Promise<void> {
-        await SQLiteHelper.execute(PostSQLite.UPDATE_SQL, [
+        await SQLiteHelper.execute(PostSQLite.UPDATE_SQL, 
             value.title,
             value.startDate,
             value.endDate,
             value.isSuccess,
             value.id
-        ]);
+        );
     }
 
     /**
@@ -82,7 +82,7 @@ class PostSQLite implements IPostRepository {
      * @param {number} id 
      */
     public async remove(id: number): Promise<void> {
-        await SQLiteHelper.execute(PostSQLite.DELETE_SQL, [id]);
+        await SQLiteHelper.execute(PostSQLite.DELETE_SQL, id);
     }
 
     /**

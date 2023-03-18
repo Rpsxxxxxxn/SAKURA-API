@@ -2,7 +2,7 @@ import { RankingEntity } from "../../domains/entities/RankingEntity";
 import ITopMassRankingRepository from "../../domains/repositories/TopMassRankingRepository";
 import { Time } from "../../domains/valueobjects/Time";
 import { UserName } from "../../domains/valueobjects/UserName";
-import RankingSQLiteFake from "./fakes/RankingSQLiteFake";
+import TopMassRankingSQLiteFake from "./fakes/TopMassRankingSQLiteFake";
 import SQLiteHelper from "./helper/SQLiteHelper";
 
 class TopMassRankingSQLite implements ITopMassRankingRepository {
@@ -56,25 +56,25 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
      * ランキングの追加
      * @param {RankingEntity} model ランキングモデルデータ
      */
-    public async insert(model: RankingEntity): Promise<void> {
-        await SQLiteHelper.execute(TopMassRankingSQLite.INSERT_SQL, [
-            model.gamemode,
-            model.username,
-            model.mass
-        ]);
+    public async insert(rankingEntity: RankingEntity): Promise<void> {
+        await SQLiteHelper.execute(TopMassRankingSQLite.INSERT_SQL,
+            rankingEntity.gamemode,
+            rankingEntity.username,
+            rankingEntity.mass
+        );
     }
     
     /**
      * ランキングの更新
      * @param {RankingEntity} model ランキングモデルデータ
      */
-    public async update(model: RankingEntity): Promise<void> {
-        await SQLiteHelper.execute(TopMassRankingSQLite.UPDATE_SQL, [
-            model.gamemode,
-            model.username,
-            model.mass,
-            model.id,
-        ])
+    public async update(rankingEntity: RankingEntity): Promise<void> {
+        await SQLiteHelper.execute(TopMassRankingSQLite.UPDATE_SQL,
+            rankingEntity.gamemode,
+            rankingEntity.username,
+            rankingEntity.mass,
+            rankingEntity.id,
+        );
     }
     
     /**
@@ -90,7 +90,7 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
      * @returns {ITopMassRankingRepository}
      */
     public static create(): ITopMassRankingRepository {
-        return process.env.NODE_ENV === 'prd' ? new TopMassRankingSQLite() : new RankingSQLiteFake();
+        return process.env.NODE_ENV === 'prd' ? new TopMassRankingSQLite() : new TopMassRankingSQLiteFake();
     }
 }
 

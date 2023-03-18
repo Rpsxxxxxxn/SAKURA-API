@@ -4,3 +4,4 @@ dist/
 *.db
 .env
 package-lock.json
+src/serviceAccountKey.json

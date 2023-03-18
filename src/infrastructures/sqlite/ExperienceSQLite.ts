@@ -32,9 +32,7 @@ class ExperienceSQLite implements IExperienceRepository {
      * @param {ExperienceEntity} value 
      */
     public async insert(value: ExperienceEntity): Promise<void> {
-        await SQLiteHelper.execute(ExperienceSQLite.INSERT_SQL, [
-            value.experience
-        ]);
+        await SQLiteHelper.execute(ExperienceSQLite.INSERT_SQL, value.experience);
     }
 
     /**
@@ -42,10 +40,10 @@ class ExperienceSQLite implements IExperienceRepository {
      * @param {ExperienceEntity} value 
      */
     public async update(value: ExperienceEntity): Promise<void> {
-        await SQLiteHelper.execute(ExperienceSQLite.UPDATE_SQL, [
+        await SQLiteHelper.execute(ExperienceSQLite.UPDATE_SQL,
             value.experience,
             value.id
-        ]);
+        );
     }
 
     /**
@@ -53,7 +51,7 @@ class ExperienceSQLite implements IExperienceRepository {
      * @param {number} id 
      */
     public async remove(id: number): Promise<void> {
-        await SQLiteHelper.execute(ExperienceSQLite.DELETE_SQL, [id]);
+        await SQLiteHelper.execute(ExperienceSQLite.DELETE_SQL, id);
     }
 
     /**

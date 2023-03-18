@@ -32,13 +32,13 @@ class ServerListSQLite implements IServerListRepository {
      * @param value 
      */
     public async insert(value: ServerListEntity): Promise<void> {
-        await SQLiteHelper.execute(ServerListSQLite.INSERT_SQL, [
+        await SQLiteHelper.execute(ServerListSQLite.INSERT_SQL,
             value.name,
             value.detail,
             value.gamemode,
             value.address,
             value.port
-        ]);
+        );
     }
 
     /**
@@ -46,14 +46,14 @@ class ServerListSQLite implements IServerListRepository {
      * @param value 
      */
     public async update(value: ServerListEntity): Promise<void> {
-        await SQLiteHelper.execute(ServerListSQLite.UPDATE_SQL, [
+        await SQLiteHelper.execute(ServerListSQLite.UPDATE_SQL,
             value.name,
             value.detail,
             value.gamemode,
             value.address,
             value.port,
             value.id
-        ])
+        )
     }
 
     /**
@@ -61,7 +61,7 @@ class ServerListSQLite implements IServerListRepository {
      * @param id 
      */
     public async remove(id: number): Promise<void> {
-        await SQLiteHelper.execute(ServerListSQLite.DELETE_SQL, [id]);
+        await SQLiteHelper.execute(ServerListSQLite.DELETE_SQL, id);
     }
 
     /**

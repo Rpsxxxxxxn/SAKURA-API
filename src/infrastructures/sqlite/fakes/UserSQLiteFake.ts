@@ -63,6 +63,18 @@ class UserCreateSQLiteFake implements IUserCreateRepository {
     public async update(model: UserEntity): Promise<void> {
         console.log(model);
     }
+
+    public async findUserIdByUid(uid: string): Promise<UserEntity> {
+        return new Promise((resolve, reject) => {
+            resolve(UserEntity.create(0, {
+                uid: 'testuid',
+                username: UserName.create({ name: 'TestUser3' }),
+                profileImageURL: 'https://avatars.githubusercontent.com/u/59530997?v=4',
+                createdAt: Time.create({ value: '2022/12/10 12:00:00' }),
+                updatedAt: Time.create({ value: '2022/12/10 12:00:00' })
+                }));
+        });
+    }
 }
 
 export default UserCreateSQLiteFake;

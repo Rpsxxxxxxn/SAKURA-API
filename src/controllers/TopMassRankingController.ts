@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Req, Res } from "routing-controllers";
+import { Response } from "express";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
 import { RankingEntity } from "../domains/entities/RankingEntity";
 import { RankingModel } from '../domains/models/RankingModel';
 import IRankingRepository from "../domains/repositories/TopMassRankingRepository";
@@ -39,22 +39,10 @@ export class TopMassRankingController {
             gamemode: body.gamemode,
             username: UserName.create({ name: body.username }),
             mass: body.mass,
-            createdAt: Time.create({value: '' }),
-            updatedAt: Time.create({value: '' })
+            createdAt: Time.create({ value: '' }),
+            updatedAt: Time.create({ value: '' })
         });
         await this.rankingRepository.insert(rankingEntity);
         return response.status(200).send(body);
-    }
-
-    /**
-     * ランキングの個別削除
-     * @param id 
-     * @returns {void}
-     */
-    @Delete('/remove/:id')
-    public async remove(@Param('id') id: number, @Res() response: Response) {
-        console.log(id);
-        await this.rankingRepository.remove(id);
-        return response.status(200).send(id);
     }
 }

@@ -17,7 +17,6 @@ export class UserModel {
       */
     public responseBody() {
         return {
-            id: this.userEntity.id,
             username: this.userEntity.username,
             profileImageURL: this.userEntity.profileImageURL,
             createdAt: this.userEntity.createdAt,
