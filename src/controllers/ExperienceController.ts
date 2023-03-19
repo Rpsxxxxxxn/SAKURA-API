@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Res } from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put, Res } from "routing-controllers";
 import { ExperienceEntity } from "../domains/entities/ExperienceEntity";
 import { ExperienceModel } from "../domains/models/ExperienceModel";
 import IExperienceRepository from "../domains/repositories/ExperienceRepository";
@@ -12,21 +12,10 @@ export class ExperienceController {
     private experienceRepository: IExperienceRepository = ExperienceSQLite.create();
 
     /**
-     * 経験値の設定
-     * @param body 
+     * 経験値の取得
+     * @param response 
      * @returns 
      */
-    @Post('/insert')
-    public async insert(@Body() body: ExperienceDto, @Res() response: Response) {
-        const experienceEntity: ExperienceEntity = ExperienceEntity.create(0, {
-            experience: body.experience,
-            createdAt: Time.create({ value: new Date().toISOString() }),
-            updatedAt: Time.create({ value: new Date().toISOString() }),
-        });
-        await this.experienceRepository.insert(experienceEntity);
-        return response.status(200).send(body);
-    }
-
     @Get('/findAll')
     @OnUndefined(404)
     public async findAll(@Res() response: Response) {
@@ -47,7 +36,43 @@ export class ExperienceController {
     @Get('/find/:id')
     @OnUndefined(404)
     public async find(@Param('id') id: number, @Res() response: Response) {
-        return this.experienceRepository.find(id);
+        const experienceEntity: ExperienceEntity = await this.experienceRepository.find(id);
+        const experienceDto: ExperienceDto = ExperienceModel.create(experienceEntity).responseBody();
+        return response.status(200).send(experienceDto);
+    }
+
+    /**
+     * 経験値の設定
+     * @param body 
+     * @returns 
+     */
+    @Post('/insert')
+    public async insert(@Body() body: ExperienceDto, @Res() response: Response) {
+        const experienceEntity: ExperienceEntity = ExperienceEntity.create(0, {
+            experience: body.experience,
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() }),
+        });
+        await this.experienceRepository.insert(experienceEntity);
+        return response.status(200).send('登録が完了しました。');
+    }
+
+    /**
+     * 経験値の更新
+     * @param id 
+     * @param body 
+     * @param response 
+     * @returns 
+     */
+    @Put('/update/:id')
+    public async update(@Param('id') id: number, @Body() body: ExperienceDto, @Res() response: Response) {
+        const experienceEntity: ExperienceEntity = ExperienceEntity.create(id, {
+            experience: body.experience,
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() }),
+        });
+        await this.experienceRepository.update(experienceEntity);
+        return response.status(200).send('更新が完了しました。');
     }
 
     /**
@@ -56,8 +81,8 @@ export class ExperienceController {
      * @returns 
      */
     @Delete('/remove/:id')
-    public async remove(@Param('id') id: number) {
+    public async remove(@Param('id') id: number, @Res() response: Response) {
         this.experienceRepository.remove(id);
-        return {};
+        return response.status(200).send('削除が完了しました。');
     }
 }

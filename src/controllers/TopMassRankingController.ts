@@ -39,8 +39,8 @@ export class TopMassRankingController {
             gamemode: body.gamemode,
             username: UserName.create({ name: body.username }),
             mass: body.mass,
-            createdAt: Time.create({ value: '' }),
-            updatedAt: Time.create({ value: '' })
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         });
         await this.rankingRepository.insert(rankingEntity);
         return response.status(200).send(body);

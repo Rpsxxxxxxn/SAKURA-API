@@ -13,6 +13,13 @@ export class Time extends ValueObject<TimeProps> {
     }
 
     /**
+     * 現在日時の取得
+     */
+    get nowDate(): string {
+        return new Date().toISOString();
+    }
+
+    /**
      * インスタンス生成
      * @param props 
      * @returns 

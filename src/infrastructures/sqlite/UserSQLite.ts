@@ -42,9 +42,6 @@ class UserSQLite implements IUserRepository {
      * @param {number} id
      */
     public async remove(id: number): Promise<void> {
-        if (id < 0) {
-            throw new Error('IDが正常ではありません。');
-        }
         await SQLiteHelper.execute(UserSQLite.DELETE_SQL, id);
     }
 
@@ -77,9 +74,6 @@ class UserSQLite implements IUserRepository {
      * @returns {Promise<UserEntity>} ユーザ情報
      */
     public async find(id: number): Promise<UserEntity> {
-        if (id < 0) {
-            throw new Error('IDが正常ではありません。');
-        }
         const user: any = await SQLiteHelper.get(UserSQLite.ONE_SQL, [id]);
         const userEntity: UserEntity = UserEntity.create(user.id, {
             uid: user.uid,

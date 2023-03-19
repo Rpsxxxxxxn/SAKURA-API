@@ -63,8 +63,8 @@ export class UserController {
             uid: uid,
             username: UserName.create({ name: body.username }),
             profileImageURL: body.profileImageURL,
-            createdAt: Time.create({ value: '' }),
-            updatedAt: Time.create({ value: '' })
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         })
         await this.userRepository.insert(userEntity);
         return response.status(201).send('登録が完了しました。');
@@ -86,8 +86,8 @@ export class UserController {
             username: UserName.create({ name: body.username }),
             uid: userEntity.uid,
             profileImageURL: body.profileImageURL,
-            createdAt: Time.create({ value: '' }),
-            updatedAt: Time.create({ value: '' })
+            createdAt: Time.create({ value: new Date().toISOString() }),
+            updatedAt: Time.create({ value: new Date().toISOString() })
         }));
         return response.status(201).send('更新が完了しました。');
     }

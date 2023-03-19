@@ -18,12 +18,12 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
      */
     public async findAll(): Promise<Array<RankingEntity>> {
         const rankings = await SQLiteHelper.all(TopMassRankingSQLite.ALL_SQL, []);
-        const result: Array<RankingEntity> = new Array<RankingEntity>();
+        const rankingEntityList: Array<RankingEntity> = new Array<RankingEntity>();
         if (!rankings) {
-            return result;
+            return rankingEntityList;
         }
         rankings.forEach((ranking: any) => {
-            result.push(RankingEntity.create(ranking.id, {
+            rankingEntityList.push(RankingEntity.create(ranking.id, {
                 gamemode: ranking.gamemode,
                 username: UserName.create({ name: ranking.username }),
                 mass: ranking.mass,
@@ -31,7 +31,7 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
                 updatedAt: Time.create({ value: ranking.updated_at }),
             }));
         });
-        return result;
+        return rankingEntityList;
     }
 
     /**
@@ -41,15 +41,14 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
      */
     public async find(id: number): Promise<RankingEntity> {
         const ranking: any = await SQLiteHelper.get(TopMassRankingSQLite.ONE_SQL, [id]);
-        const result: RankingEntity = RankingEntity.create(
-            ranking.id, {
+        const rankingEntity: RankingEntity = RankingEntity.create(ranking.id, {
             gamemode: ranking.gamemode,
             username: UserName.create({ name: ranking.username }),
             mass: ranking.mass,
-            createdAt: Time.create({value: ranking.created_at}),
-            updatedAt: Time.create({value: ranking.created_at}),
+            createdAt: Time.create({ value: ranking.created_at }),
+            updatedAt: Time.create({ value: ranking.updated_at }),
         });
-        return result;
+        return rankingEntity;
     }
     
     /**
@@ -73,6 +72,7 @@ class TopMassRankingSQLite implements ITopMassRankingRepository {
             rankingEntity.gamemode,
             rankingEntity.username,
             rankingEntity.mass,
+            rankingEntity.updatedAt,
             rankingEntity.id,
         );
     }

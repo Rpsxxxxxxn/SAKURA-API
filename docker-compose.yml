@@ -1,11 +1,13 @@
-version: '3.8'
+version: '3.9'
 services:
   webserver:
     container_name: sakura-api
     image: node:alpine
-    restart: always
+    volumes:
+      - .:/app
     ports:
-      - 8080:8080
+      - 3000:3000
+    command: sh -c "cd /app && npm run server-prd"
     networks:
       - server-mysql
 
@@ -14,7 +16,10 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: testuser  
+      MYSQL_ROOT_PASSWORD: testuser1234
+      MYSQL_DATABASE: sakura_db
+      MYSQL_USER: testexample
+      MYSQL_PASSWORD: testexample
     networks:
       - server-mysql
 

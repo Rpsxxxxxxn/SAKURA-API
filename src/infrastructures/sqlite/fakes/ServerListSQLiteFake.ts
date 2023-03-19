@@ -2,9 +2,6 @@ import { ServerListEntity } from "../../../domains/entities/ServerListEntity";
 import IServerListRepository from "../../../domains/repositories/ServerListRepository";
 
 class ServerListSQLiteFake implements IServerListRepository {
-    healthCheck(): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
     findAll(): Promise<ServerListEntity[]> {
         throw new Error("Method not implemented.");
     }
@@ -18,6 +15,9 @@ class ServerListSQLiteFake implements IServerListRepository {
         throw new Error("Method not implemented.");
     }
     remove(id: number): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    healthCheck(): Promise<void> {
         throw new Error("Method not implemented.");
     }
 }
