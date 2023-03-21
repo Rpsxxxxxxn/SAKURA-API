@@ -32,7 +32,9 @@ export class ServerListEntity extends Entity<number, ServerListProps> {
      */
     public get detail(): string { return this.props.detail; }
 
-
+    /**
+     * ゲームモード
+     */
     public get gamemode(): string { return this.props.gamemode; }
 
     /**

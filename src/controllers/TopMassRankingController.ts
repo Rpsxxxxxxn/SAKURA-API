@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { Body, Get, JsonController, OnUndefined, Post, Res } from "routing-controllers";
 import { RankingEntity } from "../domains/entities/RankingEntity";
-import { RankingModel } from '../domains/models/RankingModel';
+import { TopMassRankingModel } from '../domains/models/TopMassRankingModel';
 import IRankingRepository from "../domains/repositories/TopMassRankingRepository";
 import { Time } from "../domains/valueobjects/Time";
 import { UserName } from "../domains/valueobjects/UserName";
@@ -23,7 +23,7 @@ export class TopMassRankingController {
         const rankingEntityList: Array<RankingEntity> = await this.rankingRepository.findAll();
         const rankingDtoList: Array<TopMassRankingDto> = new Array<TopMassRankingDto>;
         rankingEntityList.forEach((rankingEntity) => {
-            rankingDtoList.push(RankingModel.create(rankingEntity).responseBody());
+            rankingDtoList.push(TopMassRankingModel.create(rankingEntity).responseBody());
         });
         return rankingDtoList;
     }

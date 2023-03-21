@@ -1,6 +1,4 @@
 import { Entity } from "../../shared/domain/Entity";
-import { UserType } from "../models/UserType";
-import { Authority } from "../valueobjects/Authority";
 import { Time } from "../valueobjects/Time";
 import { UserName } from "../valueobjects/UserName";
 
@@ -31,13 +29,28 @@ export class UserEntity extends Entity<number, UserProps> {
         this.props.username = UserName.create({name: value});
     }
 
+    /**
+     * User ID
+     */
     public get uid(): string { return this.props.uid; }
 
+    /**
+     * ユーザ名
+     */
     public get username(): string { return this.props.username.DisplayName; }
 
+    /**
+     * プロフィール画像URL
+     */
     public get profileImageURL(): string { return this.props.profileImageURL; }
 
+    /**
+     * 生成日時
+     */
     public get createdAt(): string { return this.props.createdAt.date; }
 
+    /**
+     * 更新日時
+     */
     public get updatedAt(): string { return this.props.updatedAt.date; }
 }
