@@ -31,7 +31,7 @@ export class PostController {
     @OnUndefined(404)
     public async findAll() {
         const postEntityList: Array<PostEntity> = await this.postRepository.findAll();
-        const postDtoList: Array<PostDto> = new Array<PostDto>;
+        const postDtoList: Array<PostDto> = new Array<PostDto>();
         postEntityList.forEach((postEntity) => {
             postDtoList.push(PostModel.create(postEntity).responseBody());
         });

@@ -23,7 +23,7 @@ export class UserController {
     @OnUndefined(404)
     public async findAll() {
         const userEntityList: Array<UserEntity> = await this.userRepository.findAll();
-        const userDtoList: Array<UserDto> = new Array<UserDto>;
+        const userDtoList: Array<UserDto> = new Array<UserDto>();
         if (!userEntityList) {
             return response.status(404).send('ユーザが見つかりませんでした。');
         }
